@@ -1,5 +1,6 @@
 import be.dist.common.NamingServerInt;
 import be.dist.name.NamingRMI;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.rmi.registry.LocateRegistry;
@@ -23,11 +24,10 @@ public class RMITest {
         String name = "NamingServer";
         Registry registry = LocateRegistry.getRegistry("127.0.0.1");
         rmi = (NamingServerInt) registry.lookup(name);
-    }
 
-    //@Test
-    public void getIp() throws Exception {
-       assert  rmi.getNodeIp("blabla") == null;
+//        rmi.addNode("jef","128.0.0.1");
+//        assert rmi.getNodeIp("jef").equals("128.0.0.1");
+//       assert  rmi.getNodeIp("blabla") == null;
     }
 
 }
