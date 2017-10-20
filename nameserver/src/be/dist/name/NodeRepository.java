@@ -1,11 +1,14 @@
 package be.dist.name;
+import be.dist.common.NamingServerInt;
+
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
 
-public class NodeRepository {
+public class NodeRepository implements NamingServerInt {
+
     public TreeMap<Integer,String> nodes;
     public NodeRepository(){
         nodes = new TreeMap<>();

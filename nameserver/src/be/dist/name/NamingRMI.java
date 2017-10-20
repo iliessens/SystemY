@@ -16,7 +16,7 @@ public class NamingRMI {
         }
         try {
             String serverName = "NamingServer";
-            NamingServer namingServer = new NamingServer();
+            NodeRepository namingServer = new NodeRepository();
             NamingServerInt stub =
                     (NamingServerInt) UnicastRemoteObject.exportObject(namingServer, 0);
             Registry registry = LocateRegistry.createRegistry(1099);
