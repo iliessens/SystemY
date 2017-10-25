@@ -1,20 +1,19 @@
 package be.dist.name;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
 public class NodeArchiver {
+    private String filename = "nodes.csv";
 
     public NodeArchiver() {
     }
 
     public void save(Map<Integer,String> repository) {
         try {
-        FileWriter fw = new FileWriter("nodes.csv");
+        FileWriter fw = new FileWriter(filename);
         BufferedWriter writer = new BufferedWriter(fw);
 
         for(Map.Entry<Integer,String> entry: repository.entrySet()) {
@@ -25,6 +24,16 @@ public class NodeArchiver {
         writer.close();
         } catch (IOException e) {
             System.out.println("Error saving nodeList!");
+        }
+    }
+
+    public Map<Integer,String> read() {
+        // Not ready
+        try {
+            FileReader fr = new FileReader(filename);
+
+        } catch (FileNotFoundException e) {
+            System.out.println("Error reading nodeList.");
         }
     }
 

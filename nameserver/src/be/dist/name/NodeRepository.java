@@ -1,5 +1,6 @@
 package be.dist.name;
 import be.dist.common.NamingServerInt;
+import be.dist.common.exceptions.NamingServerException;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -11,10 +12,17 @@ public class NodeRepository implements NamingServerInt {
 
     public TreeMap<Integer,String> nodes;
     public NodeRepository(){
+        //treemap omdat het dan gesorteerd staat en simpler om in te zoeken.
         nodes = new TreeMap<>();
     }
     public void addNode(String name, String IPaddress){
+        if (nodes.containsValue(IPaddress)) {
+            throw new NamingServerException("Ip adress al in gebruik.");
+        }
         int hash = getHash(name);
+        if (nodes.containsKey(hash)) {
+            throw new NamingServerException("Hash al in gebruik.");
+        }
         nodes.put(hash,IPaddress);
     }
     public void removeNode(String name){
