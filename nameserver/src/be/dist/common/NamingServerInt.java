@@ -17,5 +17,5 @@ public interface NamingServerInt extends Remote{
      * @param filename Name of file including extension
      * @return IP of file owner
      */
-   // String getOwner(String filename) throws RemoteException;
+    String getOwner(String filename) throws RemoteException;
 }
