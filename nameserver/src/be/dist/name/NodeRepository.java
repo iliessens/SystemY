@@ -16,9 +16,13 @@ public class NodeRepository implements NamingServerInt {
 
     public NodeRepository() {
         //treemap omdat het dan gesorteerd staat en simpler om in te zoeken.
-        nodes = new TreeMap<>();
 
         archiver = new NodeArchiver();
+
+        nodes = (TreeMap<Integer,String>) archiver.read();
+        if (nodes == null) {
+            nodes = new TreeMap<>();
+        }
     }
 
     public void addNode(String name, String IPaddress) {
