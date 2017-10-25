@@ -1,3 +1,4 @@
+import be.dist.common.exceptions.NamingServerException;
 import be.dist.name.NodeRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -6,7 +7,7 @@ public class RepositoryTest {
 
     private NodeRepository test;
 
-    @Test
+    @Test(expected = NamingServerException.class)
     public void testRepository() {
         test = new NodeRepository();
         test.addNode("freddie","192.168.0.7");
@@ -20,5 +21,9 @@ public class RepositoryTest {
 
         test.removeNode("freddie");
         assert test.getNodeIp("freddie") == null;
+
+        test.addNode("jefke", "192.168.0.8");
+        test.addNode("imre", "192.168.0.10");
+        test.printNodes();
     }
 }
