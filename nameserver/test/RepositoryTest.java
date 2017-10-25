@@ -56,5 +56,15 @@ public class RepositoryTest {
         catch(NamingServerException e){
         }
     }
+    @Test
+    public void getOwnerTest(){
+
+        test.addNode("bob","192.168.0.9");
+        test.addNode("jannes","192.168.0.10");
+        assert ((String)test.getOwner("0")).equals("192.168.0.9");
+        assert ((String)test.getOwner("jannes")).equals("192.168.0.7");
+        assert ((String)test.getOwner("Robbe")).equals("192.168.0.8");
+        assert ((String)test.getOwner("freddie")).equals("192.168.0.9");
+    }
 
 }
