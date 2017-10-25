@@ -30,5 +30,17 @@ public class Main {
             e.printStackTrace();
         }
         test.printNodes();
+        test.addNode("freddie","192.168.0.7");
+        test.addNode("bob","192.168.0.9");
+        test.addNode("jannes","192.168.0.10");
+        result = test.getOwner("0");
+        System.out.println(result);
+        result = test.getOwner("jannes");
+        System.out.println(result);
+        result = test.getOwner("Robbe");
+        System.out.println(result);
+        result = test.getOwner("freddie");
+        System.out.println(result);
+        test.printNodes();
     }
 }

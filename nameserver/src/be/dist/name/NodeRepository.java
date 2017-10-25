@@ -47,4 +47,20 @@ public class NodeRepository implements NamingServerInt {
         int hash = Math.abs(name.hashCode()%32768);
         return hash;
     }
+    public String getOwner(String fileName){
+        String IPaddress = "0.0.0.0";
+        int hash = getHash(fileName);
+        Set set = nodes.entrySet();
+        Iterator i = set.iterator();
+        while(i.hasNext()) {
+            Map.Entry me = (Map.Entry)i.next();
+            if ((int)me.getKey() < hash) {
+                IPaddress = (String)me.getValue();
+            }
+        }
+        if ((int)nodes.firstKey() >= hash){
+            IPaddress = (String)nodes.get(nodes.lastKey());
+        }
+        return IPaddress;
+    }
 }
