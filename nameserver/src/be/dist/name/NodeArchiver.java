@@ -31,6 +31,7 @@ public class NodeArchiver {
         // Not ready
         try {
             FileReader fr = new FileReader(filename);
+            return null;
 
         } catch (FileNotFoundException e) {
             System.out.println("Error reading nodeList.");
