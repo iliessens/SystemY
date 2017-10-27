@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class NodeArchiver {
     private String filename = "nodes.csv";
@@ -30,12 +31,30 @@ public class NodeArchiver {
     public Map<Integer,String> read() {
         // Not ready
         try {
-            FileReader fr = new FileReader(filename);
-            return null;
+            BufferedReader reader = new BufferedReader(new FileReader(filename));
+            String line;
+            TreeMap<Integer,String> readMap = new TreeMap<>();
+            try {
+                while((line=reader.readLine())!=null) {
+                    String[] str = line.split(",");
+                    for(int i=0;i<str.length;i++){
+                        String arr[] = str[i].split(":");
+                        readMap.put(Integer.parseInt(arr[0]), arr[1]);
+                    }
+                }
+                System.out.println(readMap);
+                return readMap;
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
 
         } catch (FileNotFoundException e) {
             System.out.println("Error reading nodeList.");
         }
+
+        return null;
     }
 
 }
