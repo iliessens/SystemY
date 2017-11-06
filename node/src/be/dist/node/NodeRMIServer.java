@@ -11,7 +11,7 @@ public class NodeRMIServer {
     public NodeRMIServer(String serverIp, NodeSetup setupObj) {
         System.setProperty("java.rmi.server.hostname", serverIp);
         try {
-            String serverName = "NamingServer";
+            String serverName = "nodeSetup";
             NodeRMIInt stub =
                     (NodeRMIInt) UnicastRemoteObject.exportObject(setupObj, 0);
             Registry registry = LocateRegistry.createRegistry(1099);
