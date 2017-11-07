@@ -4,7 +4,7 @@ public class Main {
 
     public static void main(String[] args) throws Exception{
         //String ip= "10.2.1.10";
-        String ip= "143.169.201.225";
+        String ip= "127.0.0.1";
         NodeSetup setup = new NodeSetup("Jefke",ip);
 
         MulticastSender sender = new MulticastSender(ip);

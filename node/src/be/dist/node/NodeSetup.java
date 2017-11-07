@@ -20,6 +20,18 @@ public class NodeSetup  implements NodeRMIInt{
         this.ownIp = ownIp;
     }
 
+    public Node getPrevious() {
+        return previous;
+    }
+
+    public Node getNext() {
+        return next;
+    }
+
+    public String getNameServerIP() {
+        return nameIP;
+    }
+
     @Override
     public void setupNode(String nameserverIP, int numberOfNodes) throws RemoteException {
         this.numberOfNodes = numberOfNodes;
