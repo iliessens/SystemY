@@ -1,5 +1,6 @@
 package be.dist.name;
 
+import be.dist.common.NameHasher;
 import be.dist.common.NamingServerInt;
 import be.dist.common.exceptions.NamingServerException;
 
@@ -60,8 +61,7 @@ public class NodeRepository implements NamingServerInt {
     }
 
     public int getHash(String name) {
-        int hash = Math.abs(name.hashCode() % 32768);
-        return hash;
+        return NameHasher.getHash(name);
     }
 
     public String getOwner(String fileName) {
