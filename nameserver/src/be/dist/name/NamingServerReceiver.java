@@ -20,9 +20,10 @@ public class NamingServerReceiver {
     DatagramPacket packet;
     boolean start;
     NodeRepository serverRepository;
-    String myIP = "10.2.1.15";
-    public NamingServerReceiver(NodeRepository namingServer) {
+    String myIP;
+    public NamingServerReceiver(NodeRepository namingServer, String ip) {
         try {
+            myIP = ip;
             serverRepository = namingServer;
             mcIPAddress = InetAddress.getByName(mcIPStr);
             System.out.println(mcIPAddress);
