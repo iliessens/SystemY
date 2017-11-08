@@ -1,5 +1,6 @@
 import be.dist.common.NamingServerInt;
 import be.dist.name.NamingRMI;
+import be.dist.name.NodeRepository;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -12,7 +13,8 @@ public class RMITest {
     private NamingServerInt rmi;
 
     public void startServer() {
-        new NamingRMI("127.0.0.1");
+        NodeRepository nodeRepository = new NodeRepository();
+        new NamingRMI("127.0.0.1", nodeRepository);
     }
 
     @Before

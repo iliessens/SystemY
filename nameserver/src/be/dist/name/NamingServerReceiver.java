@@ -29,7 +29,7 @@ public class NamingServerReceiver {
             start = true;
             this.startReceiver();
         }
-        catch(IOException ex){}
+        catch(IOException ex){System.out.println("error error");}
     }
     public void startReceiver() throws IOException{
         while(start);
@@ -43,7 +43,7 @@ public class NamingServerReceiver {
             serverRepository.addNode(msg, IPSender);
 
         }
-
+        System.out.println("hablahablahab");
         mcSocket.leaveGroup(mcIPAddress);
         mcSocket.close();
     }
