@@ -22,6 +22,7 @@ public class UIThread extends Thread {
                 inValid = false;
             } catch (InputMismatchException e) {
                 System.out.println("No valid command from user.");
+                scanner.nextLine(); // empty buffer
             }
         }
 
