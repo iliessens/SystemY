@@ -16,8 +16,8 @@ public class Main {
         MulticastListener listener = new MulticastListener(ip,setup);
         listener.start();
         System.out.println("Node staat volledig aan.");
+
         UIThread ui = new UIThread(setup);
         ui.start();
-
     }
 }

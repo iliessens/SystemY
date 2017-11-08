@@ -40,7 +40,8 @@ public class NodeSetup  implements NodeRMIInt{
         this.numberOfNodes = numberOfNodes;
         this.nameIP = nameserverIP;
 
-        System.out.println("Setup from namingserver received");
+        System.out.println("Setup from namingserver received, Nodes in network: "+numberOfNodes);
+        System.out.println("Nameserver is at: "+nameserverIP);
 
         if(numberOfNodes < 1) {
             int ownHash = NameHasher.getHash(name);
