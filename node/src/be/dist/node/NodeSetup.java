@@ -1,8 +1,11 @@
 package be.dist.node;
 
 import be.dist.common.NameHasher;
+import be.dist.common.NamingServerInt;
 import be.dist.common.Node;
 import be.dist.common.NodeRMIInt;
+
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -37,6 +40,8 @@ public class NodeSetup  implements NodeRMIInt{
         this.numberOfNodes = numberOfNodes;
         this.nameIP = nameserverIP;
 
+        System.out.println("Setup from namingserver received");
+
         if(numberOfNodes < 1) {
             int ownHash = NameHasher.getHash(name);
             Node selfNode = new Node( ownHash, ownIp);
@@ -54,9 +59,11 @@ public class NodeSetup  implements NodeRMIInt{
     public void setNeighbours(Node previous, Node next) throws RemoteException {
         if(previous != null) this.previous = previous;
         if (next!= null) this.next = next;
+        System.out.println("New neighbours set");
     }
 
-    public void processAnouncement(String ip, String naam) {
+    public void processAnnouncement(String ip, String naam) {
+        System.out.println("Announcement from new node received");
         int ownHash = NameHasher.getHash(naam);
         int newNodeHash = NameHasher.getHash(naam);
         Node newNode = new Node(newNodeHash,ip);
@@ -75,9 +82,9 @@ public class NodeSetup  implements NodeRMIInt{
     }
 
     private void sendNeighbours(String ip) {
+        System.out.println("I am previous node. Sending neighbours...");
         try {
-            Registry registry = LocateRegistry.getRegistry(ip);
-            NodeSetup remoteSetup = (NodeSetup) registry.lookup("nodeSetup");
+            NodeSetup remoteSetup = getRemoteSetup(ip);
 
             int ownHash = NameHasher.getHash(name);
             Node selfNode = new Node( ownHash, ownIp);
@@ -87,8 +94,40 @@ public class NodeSetup  implements NodeRMIInt{
         }
     }
 
-    private void sendNeighboursShutdown() {
-        // TODO
+    public void sendNeighboursShutdown() {
+        try {
+            if(previous != null) {
+                // send next to previous
+                NodeSetup prevSetup = getRemoteSetup(previous.getIp());
+                prevSetup.setNeighbours(null, next);
+            }
+
+            if(next != null) {
+                // send previous to next
+                NodeSetup nextSetup = getRemoteSetup(next.getIp());
+                nextSetup.setNeighbours(previous, null);
+            }
+
+            //Notify nameserver of shutdown
+            if(nameIP != null) {
+                Registry registry = LocateRegistry.getRegistry(nameIP);
+                NamingServerInt nameServer = (NamingServerInt) registry.lookup("NamingServer");
+                nameServer.removeNode(name);
+            }
+        } catch (RemoteException | NotBoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private NodeSetup getRemoteSetup(String ip) {
+        NodeSetup remoteSetup = null;
+        try {
+            Registry registry = LocateRegistry.getRegistry(ip);
+            remoteSetup = (NodeSetup) registry.lookup("nodeSetup");
+        } catch (RemoteException | NotBoundException e) {
+            e.printStackTrace();
+        }
+        return remoteSetup;
     }
 
 }

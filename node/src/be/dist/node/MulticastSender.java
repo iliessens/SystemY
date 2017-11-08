@@ -23,12 +23,11 @@ public class MulticastSender {
         }
     }
 
-    public void sendHello() {
+    public void sendHello(String name) {
         try {
             // join a Multicast group and send the group salutations
-            String msg = ownIp.getHostAddress();
             // zeer belangrijk
-            DatagramPacket hi = new DatagramPacket(msg.getBytes(), msg.length(),
+            DatagramPacket hi = new DatagramPacket(name.getBytes(), name.length(),
                     group, 6789);
             socket.send(hi);
 
