@@ -27,15 +27,16 @@ public class NodeRepository implements NamingServerInt {
     }
 
     public void addNode(String name, String IPaddress) {
-        if (nodes.containsValue(IPaddress)) {
-            throw new NamingServerException("Ip adress al in gebruik.");
-        }
-        int hash = getHash(name);
-        if (nodes.containsKey(hash)) {
-            throw new NamingServerException("Hash al in gebruik.");
-        }
-        nodes.put(hash, IPaddress);
-        archiver.save(nodes);
+            if (nodes.containsValue(IPaddress)) {
+                throw new NamingServerException("Ip adress al in gebruik.");
+            }
+            int hash = getHash(name);
+            if (nodes.containsKey(hash)) {
+                throw new NamingServerException("Hash al in gebruik.");
+            }
+            nodes.put(hash, IPaddress);
+            archiver.save(nodes);
+
     }
 
     public void removeNode(String name) {
@@ -79,5 +80,9 @@ public class NodeRepository implements NamingServerInt {
             IPaddress = nodes.get(nodes.lastKey());
         }
         return IPaddress;
+    }
+    public int getLength()
+    {
+        return nodes.size();
     }
 }
