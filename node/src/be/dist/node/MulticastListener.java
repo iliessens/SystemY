@@ -43,6 +43,7 @@ public class MulticastListener extends Thread{
         }
         catch (IOException e) {
             System.out.println("Error while listening on multicast.");
+            e.printStackTrace();
         }
     }
 
