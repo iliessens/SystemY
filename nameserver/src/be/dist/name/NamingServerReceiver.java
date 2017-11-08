@@ -12,8 +12,10 @@ public class NamingServerReceiver {
     InetAddress mcIPAddress = null;
     DatagramPacket packet;
     boolean start;
-    public NamingServerReceiver() {
+    NodeRepository serverRepository;
+    public NamingServerReceiver(NodeRepository namingServer) {
         try {
+            serverRepository = namingServer;
             mcIPAddress = InetAddress.getByName(mcIPStr);
             System.out.println(mcIPAddress);
             mcSocket = new MulticastSocket(mcPort);
@@ -27,18 +29,21 @@ public class NamingServerReceiver {
             start = true;
             this.startReceiver();
         }
-        catch(IOException ex){}
+        catch(IOException ex){System.out.println("error error");}
     }
     public void startReceiver() throws IOException{
         while(start);
         {
             System.out.println("Waiting for a  multicast message...");
             mcSocket.receive(packet);
+            String IPSender = packet.getAddress().getHostAddress();
             String msg = new String(packet.getData(), packet.getOffset(),
                     packet.getLength());
             System.out.println("[Multicast  Receiver] Received:" + msg);
-        }
+            serverRepository.addNode(msg, IPSender);
 
+        }
+        System.out.println("hablahablahab");
         mcSocket.leaveGroup(mcIPAddress);
         mcSocket.close();
     }

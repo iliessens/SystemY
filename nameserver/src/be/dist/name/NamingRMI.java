@@ -8,7 +8,7 @@ import java.rmi.server.UnicastRemoteObject;
 
 public class NamingRMI {
 
-    public NamingRMI(String serverIp) {
+    public NamingRMI(String serverIp, NodeRepository namingServer) {
         System.setProperty("java.rmi.server.hostname", serverIp);
         if (System.getSecurityManager() == null) {
             System.setProperty("java.security.policy", "file:src/server.policy");
@@ -16,7 +16,6 @@ public class NamingRMI {
         }
         try {
             String serverName = "NamingServer";
-            NodeRepository namingServer = new NodeRepository();
             NamingServerInt stub =
                     (NamingServerInt) UnicastRemoteObject.exportObject(namingServer, 0);
             Registry registry = LocateRegistry.createRegistry(1099);
