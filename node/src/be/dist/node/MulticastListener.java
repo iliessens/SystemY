@@ -10,10 +10,12 @@ import java.net.UnknownHostException;
 public class MulticastListener extends Thread{
     private boolean listening;
     private InetAddress ownIp;
+    private NodeSetup setup;
 
-    public MulticastListener(String ip) throws IOException{
+    public MulticastListener(String ip,NodeSetup setup) throws IOException{
         ownIp = InetAddress.getByName(ip);
         listening = true;
+        this.setup = setup;
     }
 
     public void run() {
@@ -34,8 +36,8 @@ public class MulticastListener extends Thread{
 
                 System.out.println("Waiting for a  multicast message...");
                 mcSocket.receive(packet);
-
                 processPacket(packet);
+
             }
             mcSocket.leaveGroup(mcIPAddress);
             mcSocket.close();
@@ -53,6 +55,7 @@ public class MulticastListener extends Thread{
         String msg = new String(packet.getData(), packet.getOffset(),
                 packet.getLength());
         String sourceIp = packet.getAddress().getHostAddress();
-
+        setup.processAnouncement(sourceIp,msg);
     }
+
 }
