@@ -6,7 +6,7 @@ public class Main {
         String ip= "10.2.1.10";
        // String ip= "127.0.0.1";
         String name = "Jefke";
-        NodeSetup setup = new NodeSetup("Jefke",ip);
+        NodeSetup setup = new NodeSetup(name,ip);
 
         MulticastSender sender = new MulticastSender(ip);
         sender.sendHello(name);
