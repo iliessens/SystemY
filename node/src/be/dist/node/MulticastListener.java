@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
-import java.net.UnknownHostException;
 
 
 public class MulticastListener extends Thread{
@@ -55,7 +54,7 @@ public class MulticastListener extends Thread{
         String msg = new String(packet.getData(), packet.getOffset(),
                 packet.getLength());
         String sourceIp = packet.getAddress().getHostAddress();
-        setup.processAnouncement(sourceIp,msg);
+        setup.processAnnouncement(sourceIp,msg);
     }
 
 }
