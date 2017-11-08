@@ -1,8 +1,11 @@
 package be.dist.node;
 
 import be.dist.common.NameHasher;
+import be.dist.common.NamingServerInt;
 import be.dist.common.Node;
 import be.dist.common.NodeRMIInt;
+
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -76,8 +79,7 @@ public class NodeSetup  implements NodeRMIInt{
 
     private void sendNeighbours(String ip) {
         try {
-            Registry registry = LocateRegistry.getRegistry(ip);
-            NodeSetup remoteSetup = (NodeSetup) registry.lookup("nodeSetup");
+            NodeSetup remoteSetup = getRemoteSetup(ip);
 
             int ownHash = NameHasher.getHash(name);
             Node selfNode = new Node( ownHash, ownIp);
@@ -87,8 +89,34 @@ public class NodeSetup  implements NodeRMIInt{
         }
     }
 
-    private void sendNeighboursShutdown() {
-        // TODO
+    private void sendNeighboursShutdown() throws RemoteException {
+        // send next to previous
+        NodeSetup prevSetup = getRemoteSetup(previous.getIp());
+        prevSetup.setNeighbours(null,next);
+
+        // send previous to next
+        NodeSetup nextSetup = getRemoteSetup(next.getIp());
+        prevSetup.setNeighbours(previous,null);
+
+        //Notify nameserver of shutdown
+        try {
+            Registry registry = LocateRegistry.getRegistry(nameIP);
+            NamingServerInt nameServer = (NamingServerInt) registry.lookup("NamingServer");
+            nameServer.removeNode(name);
+        } catch (RemoteException | NotBoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private NodeSetup getRemoteSetup(String ip) {
+        NodeSetup remoteSetup = null;
+        try {
+            Registry registry = LocateRegistry.getRegistry(ip);
+            remoteSetup = (NodeSetup) registry.lookup("nodeSetup");
+        } catch (RemoteException | NotBoundException e) {
+            e.printStackTrace();
+        }
+        return remoteSetup;
     }
 
 }
