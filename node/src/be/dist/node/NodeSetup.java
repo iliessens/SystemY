@@ -65,6 +65,16 @@ public class NodeSetup  implements NodeRMIInt{
         System.out.println("New neighbours set");
     }
 
+    /**
+     * Allows are remote host to check if a node is still online
+     * Should (for now) always return true
+     * @return True when node is on and in good condition
+     */
+    @Override
+    public boolean isAlive() throws RemoteException {
+        return true;
+    }
+
     public void processAnnouncement(String ip, String naam) {
         System.out.println("Announcement from new node received");
         int ownHash = NameHasher.getHash(naam);
