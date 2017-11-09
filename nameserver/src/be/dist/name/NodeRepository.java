@@ -17,6 +17,16 @@ public class NodeRepository implements NamingServerInt {
     private NodeArchiver archiver;
     private String myIP;
 
+    /**
+     * Create instance with loopback IP and don't read file from disk
+     * To facilitate testing
+     */
+    public NodeRepository() {
+        myIP = "127.0.0.1";
+        nodes = new TreeMap<>();
+        archiver = new NodeArchiver();
+    }
+
     public NodeRepository(String ip) {
         //treemap omdat het dan gesorteerd staat en simpler om in te zoeken.
         myIP = ip;
