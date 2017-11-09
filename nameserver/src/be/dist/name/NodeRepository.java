@@ -48,6 +48,11 @@ public class NodeRepository implements NamingServerInt {
         archiver.save(nodes);
     }
 
+    public void removeNodeByIp(String ip) {
+        nodes.values().remove(ip);
+        archiver.save(nodes);
+    }
+
     public String getNodeIp(String name) {
         int hash = getHash(name);
         String IP = nodes.get(hash);
@@ -116,4 +121,5 @@ public class NodeRepository implements NamingServerInt {
         }
         return null; // No result found
     }
+
 }
