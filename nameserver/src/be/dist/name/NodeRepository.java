@@ -2,6 +2,7 @@ package be.dist.name;
 
 import be.dist.common.NameHasher;
 import be.dist.common.NamingServerInt;
+import be.dist.common.Node;
 import be.dist.common.exceptions.NamingServerException;
 
 import java.util.Iterator;
@@ -86,5 +87,33 @@ public class NodeRepository implements NamingServerInt {
     public int getLength()
     {
         return nodes.size();
+    }
+
+    public Node getNext(String ip) {
+        for(Map.Entry<Integer,String> e : nodes.entrySet()) {
+            if(e.getValue().equals(ip)) {
+                // Matching element found
+
+                Map.Entry<Integer,String> next = nodes.higherEntry(e.getKey());
+                if(next == null) next = nodes.firstEntry(); // No later entry, take first
+                if (next == null) return null;
+                return new Node(next.getKey(),next.getValue());
+            }
+        }
+        return null; // No result found
+    }
+
+    public Node getPrevious(String ip) {
+        for(Map.Entry<Integer,String> e : nodes.entrySet()) {
+            if(e.getValue().equals(ip)) {
+                // Matching element found
+
+                Map.Entry<Integer,String> next = nodes.lowerEntry(e.getKey());
+                if(next == null) next = nodes.lastEntry(); // No later entry, take first
+                if (next == null) return null;
+                return new Node(next.getKey(),next.getValue());
+            }
+        }
+        return null; // No result found
     }
 }
