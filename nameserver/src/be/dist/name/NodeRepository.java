@@ -87,4 +87,8 @@ public class NodeRepository implements NamingServerInt {
     {
         return nodes.size();
     }
+
+    public void clearNodes() {
+        nodes.clear();
+    }
 }

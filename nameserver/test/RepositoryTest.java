@@ -11,7 +11,8 @@ public class RepositoryTest {
 
     @Before
     public void setup() {
-        test = new NodeRepository();
+        test = new NodeRepository("10.2.1.5");
+        test.clearNodes();
         test.addNode("freddie","192.168.0.7");
         test.addNode("imre","192.168.0.8");
     }

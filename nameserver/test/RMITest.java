@@ -13,7 +13,7 @@ public class RMITest {
     private NamingServerInt rmi;
 
     public void startServer() {
-        NodeRepository nodeRepository = new NodeRepository();
+        NodeRepository nodeRepository = new NodeRepository("10.2.1.5");
         new NamingRMI("127.0.0.1", nodeRepository);
     }
 
