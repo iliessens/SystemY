@@ -18,4 +18,8 @@ public interface NamingServerInt extends Remote{
      * @return IP of file owner
      */
     String getOwner(String filename) throws RemoteException;
+
+    Node getPrevious(String ip) throws RemoteException;
+    Node getNext(String ip) throws RemoteException;
+    void removeNodeByIp(String ip);
 }

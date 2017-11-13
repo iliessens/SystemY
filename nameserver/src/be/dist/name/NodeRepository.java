@@ -2,6 +2,7 @@ package be.dist.name;
 
 import be.dist.common.NameHasher;
 import be.dist.common.NamingServerInt;
+import be.dist.common.Node;
 import be.dist.common.exceptions.NamingServerException;
 
 import java.util.Iterator;
@@ -15,6 +16,16 @@ public class NodeRepository implements NamingServerInt {
     private TreeMap<Integer, String> nodes;
     private NodeArchiver archiver;
     private String myIP;
+
+    /**
+     * Create instance with loopback IP and don't read file from disk
+     * To facilitate testing
+     */
+    public NodeRepository() {
+        myIP = "127.0.0.1";
+        nodes = new TreeMap<>();
+        archiver = new NodeArchiver();
+    }
 
     public NodeRepository(String ip) {
         //treemap omdat het dan gesorteerd staat en simpler om in te zoeken.
@@ -44,6 +55,11 @@ public class NodeRepository implements NamingServerInt {
     public void removeNode(String name) {
         int hash = getHash(name);
         nodes.remove(hash);
+        archiver.save(nodes);
+    }
+
+    public void removeNodeByIp(String ip) {
+        nodes.values().remove(ip);
         archiver.save(nodes);
     }
 
@@ -88,7 +104,32 @@ public class NodeRepository implements NamingServerInt {
         return nodes.size();
     }
 
-    public void clearNodes() {
-        nodes.clear();
+    public Node getNext(String ip) {
+        for(Map.Entry<Integer,String> e : nodes.entrySet()) {
+            if(e.getValue().equals(ip)) {
+                // Matching element found
+
+                Map.Entry<Integer,String> next = nodes.higherEntry(e.getKey());
+                if(next == null) next = nodes.firstEntry(); // No later entry, take first
+                if (next == null) return null;
+                return new Node(next.getKey(),next.getValue());
+            }
+        }
+        return null; // No result found
     }
+
+    public Node getPrevious(String ip) {
+        for(Map.Entry<Integer,String> e : nodes.entrySet()) {
+            if(e.getValue().equals(ip)) {
+                // Matching element found
+
+                Map.Entry<Integer,String> next = nodes.lowerEntry(e.getKey());
+                if(next == null) next = nodes.lastEntry(); // No later entry, take first
+                if (next == null) return null;
+                return new Node(next.getKey(),next.getValue());
+            }
+        }
+        return null; // No result found
+    }
+
 }

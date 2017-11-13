@@ -1,5 +1,6 @@
 package be.dist.node;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class UIThread extends Thread {
@@ -13,10 +14,22 @@ public class UIThread extends Thread {
 
     public void run() {
         System.out.println("Press 9 to quit: ");
-        int keuze = scanner.nextInt();
+        int keuze = 0;
+        boolean inValid = true;
+        while(inValid) {
+            try {
+                keuze = scanner.nextInt();
+                inValid = false;
+            } catch (InputMismatchException e) {
+                System.out.println("No valid command from user.");
+                scanner.nextLine(); // empty buffer
+            }
+        }
+
         switch (keuze) {
             case 9: shutdown();
                     break;
+            default: System.out.println("No valid command from user.");
         }
     }
 

@@ -40,6 +40,8 @@ public class NodeSetup  implements NodeRMIInt{
         this.numberOfNodes = numberOfNodes;
         this.nameIP = nameserverIP;
 
+        FailureHandler.connect(nameIP);
+
         System.out.println("Setup from namingserver received, Nodes in network: "+numberOfNodes);
         System.out.println("Nameserver is at: "+nameserverIP);
 
@@ -61,6 +63,16 @@ public class NodeSetup  implements NodeRMIInt{
         if(previous != null) this.previous = previous;
         if (next!= null) this.next = next;
         System.out.println("New neighbours set");
+    }
+
+    /**
+     * Allows are remote host to check if a node is still online
+     * Should (for now) always return true
+     * @return True when node is on and in good condition
+     */
+    @Override
+    public boolean isAlive() throws RemoteException {
+        return true;
     }
 
     public void processAnnouncement(String ip, String naam) {
