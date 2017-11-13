@@ -81,19 +81,26 @@ public class NodeSetup  implements NodeRMIInt{
         int newNodeHash = NameHasher.getHash(naam);
         Node newNode = new Node(newNodeHash,ip);
 
-        if ((ownHash < newNodeHash)&&(newNodeHash < next.getHash())) {
-            // Deze node is de vorige
+        if (previous == null || next == null) {
             next = newNode;
-            // Doorgeven naar nieuwe node
-            sendNeighbours(ip);
-
-        }
-        if ((previous.getHash() < newNodeHash )&&(ownHash > newNodeHash)) {
-            // Deze node is de volgende van de nieuwe node --> De nieuwe is de vorige
             previous = newNode;
+            sendNeighbours(ip);
+        } else {
+            if ((ownHash < newNodeHash) && (newNodeHash < next.getHash())) {
+                // Deze node is de vorige
+                next = newNode;
+                // Doorgeven naar nieuwe node
+                sendNeighbours(ip);
+
+            }
+            if ((previous.getHash() < newNodeHash) && (ownHash > newNodeHash)) {
+                // Deze node is de volgende van de nieuwe node --> De nieuwe is de vorige
+                previous = newNode;
+            }
         }
     }
 
+    // stuur buren naar opgegeven IP
     private void sendNeighbours(String ip) {
         System.out.println("I am previous node. Sending neighbours...");
         try {
