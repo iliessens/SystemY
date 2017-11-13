@@ -104,7 +104,7 @@ public class NodeSetup  implements NodeRMIInt{
     private void sendNeighbours(String ip) {
         System.out.println("I am previous node. Sending neighbours...");
         try {
-            NodeSetup remoteSetup = getRemoteSetup(ip);
+            NodeRMIInt remoteSetup = getRemoteSetup(ip);
 
             int ownHash = NameHasher.getHash(name);
             Node selfNode = new Node( ownHash, ownIp);
@@ -118,13 +118,13 @@ public class NodeSetup  implements NodeRMIInt{
         try {
             if(previous != null) {
                 // send next to previous
-                NodeSetup prevSetup = getRemoteSetup(previous.getIp());
+                NodeRMIInt prevSetup = getRemoteSetup(previous.getIp());
                 prevSetup.setNeighbours(null, next);
             }
 
             if(next != null) {
                 // send previous to next
-                NodeSetup nextSetup = getRemoteSetup(next.getIp());
+                NodeRMIInt nextSetup = getRemoteSetup(next.getIp());
                 nextSetup.setNeighbours(previous, null);
             }
 
@@ -139,11 +139,11 @@ public class NodeSetup  implements NodeRMIInt{
         }
     }
 
-    private NodeSetup getRemoteSetup(String ip) {
-        NodeSetup remoteSetup = null;
+    private NodeRMIInt getRemoteSetup(String ip) {
+        NodeRMIInt remoteSetup = null;
         try {
             Registry registry = LocateRegistry.getRegistry(ip);
-            remoteSetup = (NodeSetup) registry.lookup("nodeSetup");
+            remoteSetup = (NodeRMIInt) registry.lookup("nodeSetup");
         } catch (RemoteException | NotBoundException e) {
             e.printStackTrace();
         }
