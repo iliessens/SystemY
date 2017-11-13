@@ -104,6 +104,10 @@ public class NodeRepository implements NamingServerInt {
         return nodes.size();
     }
 
+    public void clearNodes() {
+        nodes.clear();
+    }
+
     public Node getNext(String ip) {
         for(Map.Entry<Integer,String> e : nodes.entrySet()) {
             if(e.getValue().equals(ip)) {
