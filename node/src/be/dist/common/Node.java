@@ -1,6 +1,8 @@
 package be.dist.common;
 
-public class Node {
+import java.io.Serializable;
+
+public class Node implements Serializable{
     private int hash;
     private String ip;
 
