@@ -12,6 +12,8 @@ import java.util.stream.Stream;
 
 public class FileIO {
 
+    private Map<String,FileInformation> informationMap;
+
     public List<String> getLocalFiles() {
         try (Stream<Path> paths = Files.walk(Paths.get("files/original/"))) {
            return paths
@@ -26,11 +28,13 @@ public class FileIO {
     }
 
     public Map<String,FileInformation> getMap() {
-        return getLocalFiles()
-                .stream()
-                .map(x -> new FileInformation(true,null, x))
-                .collect(Collectors.toMap(FileInformation::getFileName, x -> x))
-        ;
+        if(informationMap == null) {
+            informationMap = getLocalFiles()
+                    .stream()
+                    .map(x -> new FileInformation(true, null, x))
+                    .collect(Collectors.toMap(FileInformation::getFileName, x -> x));
+        }
+        return informationMap;
     }
 
 }
