@@ -12,6 +12,9 @@ public class Main {
         sender.sendHello(name);
         new NodeRMIServer(ip,setup);
 
+        //fileDiscovery
+        FileDiscovery filediscovery = new FileDiscovery(setup.getNameServerIP(), ip, name);
+
         // After setup
         MulticastListener listener = new MulticastListener(ip,setup);
         listener.start();
