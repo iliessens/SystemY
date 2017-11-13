@@ -21,5 +21,5 @@ public interface NamingServerInt extends Remote{
 
     Node getPrevious(String ip) throws RemoteException;
     Node getNext(String ip) throws RemoteException;
-    void removeNodeByIp(String ip);
+    void removeNodeByIp(String ip)throws RemoteException;
 }
