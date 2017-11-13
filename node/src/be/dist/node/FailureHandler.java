@@ -13,7 +13,7 @@ public class FailureHandler {
 
     public static void connect(String nameIp) {
         try {
-            Registry registry = LocateRegistry.getRegistry();
+            Registry registry = LocateRegistry.getRegistry(nameIp);
             namingServer = (NamingServerInt) registry.lookup("NamingServer");
 
         } catch (RemoteException | NotBoundException e) {
