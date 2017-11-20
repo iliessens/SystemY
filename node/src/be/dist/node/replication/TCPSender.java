@@ -27,7 +27,7 @@ public class TCPSender {
             int bytesRead;
             System.out.println("TRANSFERING FILE ... ");
             byte[] tempNameBytes = fileName.substring(fileName.lastIndexOf('/') + 1).getBytes("UTF-8"); // get only filename
-            byte[] nameSpace = Arrays.copyOf(tempNameBytes,256);
+            byte[] nameSpace = Arrays.copyOf(tempNameBytes,255);
             out.write(nameSpace);
             while ((bytesRead = in.read(buffer)) != -1) {
                 out.write(buffer, 0, bytesRead);
