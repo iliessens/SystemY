@@ -1,7 +1,8 @@
-package be.dist.node;
+package be.dist.node.replication;
 import java.net.*;
 import java.io.*;
 
+import be.dist.node.Connection;
 import javafx.application.Application;
 import javafx.stage.Stage;
 

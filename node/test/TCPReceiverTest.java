@@ -1,4 +1,4 @@
-import be.dist.node.TCPListener;
+import be.dist.node.replication.TCPListener;
 
 public class TCPReceiverTest {
 

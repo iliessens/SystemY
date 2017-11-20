@@ -1,4 +1,4 @@
-import be.dist.node.TCPSender;
+import be.dist.node.replication.TCPSender;
 import org.junit.Test;
 
 public class TCPSenderTest {
