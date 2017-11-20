@@ -11,6 +11,7 @@ public class FileDiscovery {
     NamingServerInt remoteSetup;
     String myIP;
     String myName;
+    FileIO io;
 
     public FileDiscovery(String ServerIP, String ip, String name){
         myIP = ip;
@@ -24,7 +25,7 @@ public class FileDiscovery {
     }
 
     public void discoverFiles() {
-        FileIO io =  new FileIO();
+        io =  new FileIO();
         for(String name : io.getLocalFiles()) {
             fileCheck(name);
         }
@@ -33,12 +34,40 @@ public class FileDiscovery {
 
     public void fileCheck(String fileName)  {
         try {
+            FileInformation fileInfo;
             String fileOwner = remoteSetup.getOwner(fileName);
             if (fileOwner.equals(myIP)) {
                 String fileDuplicate = remoteSetup.getOwner(myName);
                 //sendFile to IP fileDuplicate
+                fileInfo = io.getMap().get(fileName);
+                fileInfo.setLocal(true);
+                fileInfo.setOwner(true);
             } else {
                 //sendFile to IP fileOwner
+                fileInfo = io.getMap().get(fileName);
+                fileInfo.setLocal(true);
+                fileInfo.setOwner(false);
+            }
+        }
+        catch (RemoteException e) {
+            e.printStackTrace();
+            // doe failure handler
+        }
+
+    }
+
+    public void fileCheckDownloads(String fileName)  {
+        try {
+            FileInformation fileInfo;
+            String fileOwner = remoteSetup.getOwner(fileName);
+            if (fileOwner.equals(myIP)) {
+                String fileDuplicate = remoteSetup.getOwner(myName);
+                fileInfo = new FileInformation(false, true, fileName);
+                io.getMap().put(fileName, fileInfo);
+
+            } else {
+                fileInfo = new FileInformation(false, false, fileName);
+                io.getMap().put(fileName, fileInfo);
             }
         }
         catch (RemoteException e) {
