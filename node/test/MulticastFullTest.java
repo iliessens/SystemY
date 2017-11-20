@@ -1,5 +1,5 @@
-import be.dist.node.MulticastListener;
-import be.dist.node.MulticastSender;
+import be.dist.node.discovery.MulticastListener;
+import be.dist.node.discovery.MulticastSender;
 import be.dist.node.NodeSetup;
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-import be.dist.node.MulticastSender;
+import be.dist.node.discovery.MulticastSender;
 import org.junit.Test;
 
 public class MulticastSenderTest {

@@ -1,7 +1,8 @@
-package be.dist.node;
+package be.dist.node.discovery;
 
 import be.dist.common.NamingServerInt;
 import be.dist.common.Node;
+import be.dist.node.NodeSetup;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;

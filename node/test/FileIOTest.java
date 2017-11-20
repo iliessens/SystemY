@@ -1,5 +1,5 @@
-import be.dist.node.FileIO;
-import be.dist.node.FileInformation;
+import be.dist.node.replication.FileIO;
+import be.dist.node.replication.FileInformation;
 import org.junit.Test;
 
 import java.util.List;

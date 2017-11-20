@@ -1,4 +1,4 @@
-package be.dist.node;
+package be.dist.node.replication;
 
 public class FileInformation {
 
