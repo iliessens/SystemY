@@ -1,5 +1,10 @@
 package be.dist.node;
 
+import be.dist.node.discovery.MulticastListener;
+import be.dist.node.discovery.MulticastSender;
+import be.dist.node.discovery.NodeRMIServer;
+import be.dist.node.replication.FileDiscovery;
+
 public class Main {
 
     public static void main(String[] args) throws Exception{
@@ -11,6 +16,9 @@ public class Main {
         MulticastSender sender = new MulticastSender(ip);
         sender.sendHello(name);
         new NodeRMIServer(ip,setup);
+
+        //fileDiscovery
+        FileDiscovery filediscovery = new FileDiscovery(setup.getNameServerIP(), ip, name);
 
         // After setup
         MulticastListener listener = new MulticastListener(ip,setup);

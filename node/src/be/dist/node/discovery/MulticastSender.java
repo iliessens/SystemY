@@ -1,4 +1,4 @@
-package be.dist.node;
+package be.dist.node.discovery;
 
 import java.io.IOException;
 import java.net.DatagramPacket;

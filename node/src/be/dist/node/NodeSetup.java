@@ -4,6 +4,7 @@ import be.dist.common.NameHasher;
 import be.dist.common.NamingServerInt;
 import be.dist.common.Node;
 import be.dist.common.NodeRMIInt;
+import be.dist.node.discovery.FailureHandler;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;

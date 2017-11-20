@@ -1,6 +1,7 @@
-package be.dist.node;
+package be.dist.node.discovery;
 
 import be.dist.common.NodeRMIInt;
+import be.dist.node.NodeSetup;
 
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
