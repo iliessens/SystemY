@@ -21,15 +21,27 @@ public class Connection extends Thread {
             InputStream in = connection.getInputStream();
 
             byte[] buffer = new byte[1024];
+            byte[] nameBuffer = new byte[255];
             int bytesRead;
             System.out.println("[DOWNLOADING FILE]");
 
-            if ((bytesRead = in.read(buffer)) != -1)
-                fileName = new String(Arrays.copyOfRange(buffer, 0, 255), "UTF-8");
+            char c = 1;
+            int i = 0;
+            if ((bytesRead = in.read(nameBuffer)) != -1)
+                //System.out.println(bytesRead);
+                while(c != 0) {
+                    c = (char)nameBuffer[i];
+                    if (c !=0 )
+                        fileName += c;
+                    i++;
+                }
 
-            OutputStream localWriter = new FileOutputStream(fileName);
+            System.out.println(fileName);
+
+            OutputStream localWriter = new FileOutputStream("files/replication/" + fileName);
 
             while ((bytesRead = in.read(buffer)) != -1) {
+                System.out.println(bytesRead);
                 localWriter.write(buffer, 0, bytesRead);
             }
 
