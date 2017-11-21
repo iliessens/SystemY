@@ -1,10 +1,4 @@
 package be.dist.node.replication;
-import java.net.*;
-import java.io.*;
-
-import be.dist.node.Connection;
-import javafx.application.Application;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.ServerSocket;
