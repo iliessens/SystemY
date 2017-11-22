@@ -36,12 +36,12 @@ public class Connection extends Thread {
                     i++;
                 }
 
-            System.out.println(fileName);
+            System.out.println("RECEIVED FILE --> " + fileName);
 
             OutputStream localWriter = new FileOutputStream("files/replication/" + fileName);
 
             while ((bytesRead = in.read(buffer)) != -1) {
-                System.out.println(bytesRead);
+                //System.out.println(bytesRead);
                 localWriter.write(buffer, 0, bytesRead);
             }
 
@@ -50,6 +50,7 @@ public class Connection extends Thread {
             in.close();
             localWriter.close();
             connection.close();
+            FileDiscovery.checkDownloads(fileName);
             System.out.println("[DISCONNECTED]");
 
         } catch (IOException e) {

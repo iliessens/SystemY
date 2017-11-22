@@ -9,11 +9,13 @@ import java.rmi.registry.Registry;
 import java.util.Map;
 
 public class FileDiscovery {
-    NamingServerInt remoteSetup;
-    String myIP;
-    String myName;
-    FileIO io;
-    TCPSender sender;
+    private static FileDiscovery discovery;
+
+    private NamingServerInt remoteSetup;
+    private String myIP;
+    private String myName;
+    private FileIO io;
+    private TCPSender sender;
 
     public FileDiscovery(String ServerIP, String ip, String name){
         myIP = ip;
@@ -27,6 +29,11 @@ public class FileDiscovery {
         sender = new TCPSender(7899);
         this.discoverFiles();
 
+        discovery = this;
+    }
+
+      public static void checkDownloads(String filename) {
+              discovery.fileCheckDownloads(filename);
     }
 
     public void discoverFiles() {
@@ -35,7 +42,6 @@ public class FileDiscovery {
             fileCheck(name);
         }
     }
-
 
     public void fileCheck(String fileName)  {
         try {
