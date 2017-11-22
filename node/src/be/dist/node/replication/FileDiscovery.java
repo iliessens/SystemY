@@ -8,6 +8,8 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
 public class FileDiscovery {
+    private static FileDiscovery discovery;
+
     NamingServerInt remoteSetup;
     String myIP;
     String myName;
@@ -22,6 +24,8 @@ public class FileDiscovery {
         } catch (RemoteException | NotBoundException e) {
             e.printStackTrace();
         }
+
+        discovery = this;
     }
 
     public void discoverFiles() {
@@ -54,6 +58,10 @@ public class FileDiscovery {
             // doe failure handler
         }
 
+    }
+
+    public static void checkDownloads(String filename) {
+        discovery.fileCheckDownloads(filename);
     }
 
     public void fileCheckDownloads(String fileName)  {
