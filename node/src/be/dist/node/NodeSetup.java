@@ -22,8 +22,6 @@ public class NodeSetup  implements NodeRMIInt{
 
     private FileDiscovery discovery;
 
-    private Runnable actionWhenReady;
-
     public NodeSetup(String name, String ownIp) {
         this.name = name;
         this.ownIp = ownIp;

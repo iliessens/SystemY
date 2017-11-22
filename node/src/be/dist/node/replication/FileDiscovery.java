@@ -22,7 +22,7 @@ public class FileDiscovery {
         myName = name;
         try {
             Registry registry = LocateRegistry.getRegistry(ServerIP);
-            remoteSetup = (NamingServerInt) registry.lookup("ServerRepository");
+            remoteSetup = (NamingServerInt) registry.lookup("NamingServer");
         } catch (RemoteException | NotBoundException e) {
             e.printStackTrace();
         }
