@@ -41,7 +41,7 @@ public class Connection extends Thread {
             OutputStream localWriter = new FileOutputStream("files/replication/" + fileName);
 
             while ((bytesRead = in.read(buffer)) != -1) {
-                System.out.println(bytesRead);
+                //System.out.println(bytesRead);
                 localWriter.write(buffer, 0, bytesRead);
             }
 
