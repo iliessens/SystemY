@@ -36,7 +36,7 @@ public class Connection extends Thread {
                     i++;
                 }
 
-            System.out.println(fileName);
+            System.out.println("RECEIVED FILE --> " + fileName);
 
             OutputStream localWriter = new FileOutputStream("files/replication/" + fileName);
 
@@ -50,6 +50,7 @@ public class Connection extends Thread {
             in.close();
             localWriter.close();
             connection.close();
+            FileDiscovery.checkDownloads(fileName);
             System.out.println("[DISCONNECTED]");
 
         } catch (IOException e) {
