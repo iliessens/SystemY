@@ -17,6 +17,7 @@ public class FileIO {
         try (Stream<Path> paths = Files.walk(Paths.get("files/original/"))) {
            return paths
                     .filter(Files::isRegularFile)
+                   .map(Path::getFileName)
                    .map(Path::toString)
                    .collect(Collectors.toList());
         }
