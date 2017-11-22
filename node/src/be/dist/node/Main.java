@@ -8,9 +8,9 @@ import be.dist.node.replication.FileDiscovery;
 public class Main {
 
     public static void main(String[] args) throws Exception{
-        String ip= "10.2.1.15";
+        String ip= "10.2.1.22";
        // String ip= "127.0.0.1";
-        String name = "meeeee";
+        String name = "James Of Hannes of Wannes ofzo";
         NodeSetup setup = new NodeSetup(name,ip);
 
         MulticastSender sender = new MulticastSender(ip);

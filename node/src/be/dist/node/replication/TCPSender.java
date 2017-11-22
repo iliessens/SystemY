@@ -13,20 +13,20 @@ public class TCPSender {
         this.port = port;
     }
 
-    public void send(String ipOmMeeTeVerbinden, String fileName) {
+    public void send(String ipOmMeeTeVerbinden, String filePath) {
         Socket senderSocket = null;
         try {
             System.out.println("CONNECTING ... ");
             senderSocket = new Socket(ipOmMeeTeVerbinden, port);
             System.out.println("[CONNECTION ESTABLISHED]");
-            File file = new File(fileName);
+            File file = new File(filePath);
             InputStream in = new FileInputStream(file);
             OutputStream out = senderSocket.getOutputStream();
 
             byte[] buffer = new byte[1024];
             int bytesRead;
             System.out.println("TRANSFERING FILE ... ");
-            byte[] tempNameBytes = fileName.substring(fileName.lastIndexOf('/') + 1).getBytes("UTF-8"); // get only filename
+            byte[] tempNameBytes = filePath.substring(filePath.lastIndexOf('/') + 1).getBytes("UTF-8"); // get only filename
             byte[] nameSpace = Arrays.copyOf(tempNameBytes,255);
             out.write(nameSpace);
             while ((bytesRead = in.read(buffer)) != -1) {
