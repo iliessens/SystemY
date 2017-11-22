@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 public class TCPSender {
 
-    private int port = 7896;
+    private int port;
 
     public TCPSender (int port) {
         this.port = port;
