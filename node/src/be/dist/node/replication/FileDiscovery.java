@@ -6,6 +6,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.Map;
 
 public class FileDiscovery {
     NamingServerInt remoteSetup;
@@ -82,5 +83,43 @@ public class FileDiscovery {
             // doe failure handler TODO
         }
 
+    }
+
+    public void fileCheckNewNode(String ipNewNode) {
+        try {
+            //hij loopt over alle files die hij heeft, zowel origineel als replicatie.
+        for(Map.Entry<String,FileInformation> entry : io.getMap().entrySet()) {
+            String fileName = entry.getKey();
+            FileInformation fileInfo = entry.getValue();
+            String fileOwner = null;
+            String filePath = null;
+            fileOwner = remoteSetup.getOwner(fileName);
+            if(fileInfo.getOwner()){
+                // hij checkt eerst of hij hiervan de eigenaar was. zo niet dan kan de ieuwe node hier onmogelijk de eigenaar van worden.
+                if(fileOwner.equals(myIP)) {
+                    //dan checkt hij of hij nog altijd de owner is. zoja dan moet het file niet verplaatst worden
+
+                }
+                else{
+
+
+                    if(fileInfo.getLocal()){
+                        //hier checkt hij of hij het file lokaal heeft of niet, om de juiste filepath te creeeren.
+                        filePath = "files/original/"+fileName;
+                    }
+                    else{
+                        filePath = "files/replication/"+fileName;
+                    }
+                    //dan zet hij zichzelf niet als de owner en stuurt hij het file door naar de nieuwe eigenaar.
+                    sender.send(ipNewNode, filePath);
+                    fileInfo.setOwner(false);
+                }
+            }
+
+
+        }
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
     }
 }
