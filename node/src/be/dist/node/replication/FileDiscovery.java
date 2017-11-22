@@ -12,6 +12,7 @@ public class FileDiscovery {
     String myIP;
     String myName;
     FileIO io;
+    TCPSender sender;
 
     public FileDiscovery(String ServerIP, String ip, String name){
         myIP = ip;
@@ -22,6 +23,9 @@ public class FileDiscovery {
         } catch (RemoteException | NotBoundException e) {
             e.printStackTrace();
         }
+        sender = new TCPSender(7899);
+        this.discoverFiles();
+
     }
 
     public void discoverFiles() {
@@ -35,15 +39,18 @@ public class FileDiscovery {
     public void fileCheck(String fileName)  {
         try {
             FileInformation fileInfo;
-            String fileOwner = remoteSetup.getOwner(fileName);
-            if (fileOwner.equals(myIP)) {
-                String fileDuplicate = remoteSetup.getOwner(myName);
-                //sendFile to IP fileDuplicate
+            String fileOwnerIP = remoteSetup.getOwner(fileName);
+            String filePath = "files/original/"+fileName;
+            if (fileOwnerIP.equals(myIP)) {
+                String fileDuplicateIP = remoteSetup.getOwner(myName);
+                // dit werkt omdat deze de eigenaar van de file is. en de eigenaar van een file dat de naam van deze node heeft. is de vorigge node
+                //Dus hiermee krijgen we het Ip van de vorige node.
+                sender.send(fileDuplicateIP, filePath);
                 fileInfo = io.getMap().get(fileName);
                 fileInfo.setLocal(true);
                 fileInfo.setOwner(true);
             } else {
-                //sendFile to IP fileOwner
+                sender.send(fileOwnerIP, filePath);
                 fileInfo = io.getMap().get(fileName);
                 fileInfo.setLocal(true);
                 fileInfo.setOwner(false);
@@ -51,7 +58,7 @@ public class FileDiscovery {
         }
         catch (RemoteException e) {
             e.printStackTrace();
-            // doe failure handler
+            // doe failure handler TODO
         }
 
     }
@@ -72,7 +79,7 @@ public class FileDiscovery {
         }
         catch (RemoteException e) {
             e.printStackTrace();
-            // doe failure handler
+            // doe failure handler TODO
         }
 
     }
