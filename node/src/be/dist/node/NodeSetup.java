@@ -5,6 +5,7 @@ import be.dist.common.NamingServerInt;
 import be.dist.common.Node;
 import be.dist.common.NodeRMIInt;
 import be.dist.node.discovery.FailureHandler;
+import be.dist.node.replication.FileDiscovery;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -18,6 +19,8 @@ public class NodeSetup  implements NodeRMIInt{
     private Node next;
     private String name;
     private String ownIp;
+
+    private FileDiscovery discovery;
 
     private Runnable actionWhenReady;
 
@@ -101,6 +104,8 @@ public class NodeSetup  implements NodeRMIInt{
                 // Doorgeven naar nieuwe node
                 sendNeighbours(ip);
 
+                // TODO send files to new node
+                //discovery.filecheckNewNode(ip);
             }
             if ((previous.getHash() < newNodeHash) && (ownHash > newNodeHash)) {
                 // Deze node is de volgende van de nieuwe node --> De nieuwe is de vorige
@@ -165,11 +170,8 @@ public class NodeSetup  implements NodeRMIInt{
         if (next == null) return;
         // All setup is received
         // Start replicating files
-        actionWhenReady.run();
-    }
 
-    public void setReadyAction(Runnable action) {
-        actionWhenReady = action;
+        discovery =  new FileDiscovery(nameIP, ownIp, name);
     }
 
 }
