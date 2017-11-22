@@ -9,9 +9,21 @@ import be.dist.node.replication.TCPListener;
 public class Main {
 
     public static void main(String[] args) throws Exception{
-        String ip= "10.2.1.22";
-       // String ip= "127.0.0.1";
-        String name = "James Of Hannes of Wannes ofzo";
+        String ip;
+        String name;
+        if(args.length < 2) {
+            ip= "10.2.1.10";
+            // String ip= "127.0.0.1";
+            name = "Imre";
+
+            System.out.println("No command line parameters: using defaults");
+        }
+        else {
+            ip = args[1];
+            name = args[0];
+            System.out.println(ip);
+        }
+
         NodeSetup setup = new NodeSetup(name,ip);
 
         MulticastSender sender = new MulticastSender(ip);
