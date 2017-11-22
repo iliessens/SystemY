@@ -4,6 +4,7 @@ import be.dist.node.discovery.MulticastListener;
 import be.dist.node.discovery.MulticastSender;
 import be.dist.node.discovery.NodeRMIServer;
 import be.dist.node.replication.FileDiscovery;
+import be.dist.node.replication.TCPListener;
 
 public class Main {
 
@@ -18,11 +19,15 @@ public class Main {
         new NodeRMIServer(ip,setup);
 
         //fileDiscovery
-        FileDiscovery filediscovery = new FileDiscovery(setup.getNameServerIP(), ip, name);
+        setup.setReadyAction(() -> new FileDiscovery(setup.getNameServerIP(), ip, name));
 
         // After setup
         MulticastListener listener = new MulticastListener(ip,setup);
         listener.start();
+        System.out.println("Multicast listener enabled...");
+
+        TCPListener tcpListener = new TCPListener(7899);
+        System.out.println("TCP listener started");
         System.out.println("Node staat volledig aan.");
 
         UIThread ui = new UIThread(setup);

@@ -19,6 +19,8 @@ public class NodeSetup  implements NodeRMIInt{
     private String name;
     private String ownIp;
 
+    private Runnable actionWhenReady;
+
     public NodeSetup(String name, String ownIp) {
         this.name = name;
         this.ownIp = ownIp;
@@ -163,6 +165,11 @@ public class NodeSetup  implements NodeRMIInt{
         if (next == null) return;
         // All setup is received
         // Start replicating files
+        actionWhenReady.run();
+    }
+
+    public void setReadyAction(Runnable action) {
+        actionWhenReady = action;
     }
 
 }
