@@ -35,6 +35,10 @@ public class FileDiscovery {
       public static void checkDownloads(String filename) {
               discovery.fileCheckDownloads(filename);
     }
+      public static void checkLocalFiles() {
+        discovery.discoverFiles();
+    }
+
 
     public void discoverFiles() {
         io =  new FileIO();
