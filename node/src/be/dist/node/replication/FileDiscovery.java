@@ -102,7 +102,7 @@ public class FileDiscovery {
             String filePath = null;
             fileOwner = remoteSetup.getOwner(fileName);
             if(fileInfo.getOwner()){
-                // hij checkt eerst of hij hiervan de eigenaar was. zo niet dan kan de ieuwe node hier onmogelijk de eigenaar van worden.
+                // hij checkt eerst of hij hiervan de eigenaar was. zo niet dan kan de nieuwe node hier onmogelijk de eigenaar van worden.
                 if(fileOwner.equals(myIP)) {
                     //dan checkt hij of hij nog altijd de owner is. zoja dan moet het file niet verplaatst worden
 
