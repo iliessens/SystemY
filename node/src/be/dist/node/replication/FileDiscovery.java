@@ -49,17 +49,22 @@ public class FileDiscovery {
             FileInformation fileInfo;
             String fileOwnerIP = remoteSetup.getOwner(fileName);
             String filePath = "files/original/"+fileName;
+
+            fileInfo = io.getMap().get(fileName);
+            if (fileInfo == null) { // new file not yet in map
+                fileInfo = new FileInformation(true,false,fileName);
+                io.getMap().put(fileName,fileInfo);
+            }
+
             if (fileOwnerIP.equals(myIP)) {
                 String fileDuplicateIP = remoteSetup.getOwner(myName);
                 // dit werkt omdat deze de eigenaar van de file is. en de eigenaar van een file dat de naam van deze node heeft. is de vorigge node
                 //Dus hiermee krijgen we het Ip van de vorige node.
                 sender.send(fileDuplicateIP, filePath);
-                fileInfo = io.getMap().get(fileName);
                 fileInfo.setLocal(true);
                 fileInfo.setOwner(true);
             } else {
                 sender.send(fileOwnerIP, filePath);
-                fileInfo = io.getMap().get(fileName);
                 fileInfo.setLocal(true);
                 fileInfo.setOwner(false);
             }
