@@ -1,5 +1,7 @@
 package be.dist.node;
 
+import be.dist.common.Node;
+
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -13,6 +15,7 @@ public class UIThread extends Thread {
     }
 
     public void run() {
+        System.out.println("Press 1 to show current neighbours");
         System.out.println("Press 9 to quit: ");
         int keuze = 0;
         boolean inValid = true;
@@ -27,6 +30,8 @@ public class UIThread extends Thread {
         }
 
         switch (keuze) {
+            case 1: printNeighbours();
+                    break;
             case 9: shutdown();
                     break;
             default: System.out.println("No valid command from user.");
@@ -36,5 +41,12 @@ public class UIThread extends Thread {
     public void shutdown() {
         setup.sendNeighboursShutdown();
         System.exit(0);
+    }
+
+    public void printNeighbours() {
+        Node previous = setup.getPrevious();
+        Node next = setup.getPrevious();
+        System.out.println("Previous: " + (previous != null ? previous.getIp() : "Not set"));
+        System.out.println("Next: " + (next != null ? next.getIp() : "Not set"));
     }
 }
