@@ -39,23 +39,6 @@ public class Main {
         System.out.println("TCP listener started");
         System.out.println("Node staat volledig aan.");
 
-
-        Thread newFilesChecker = new Thread(() -> {
-            /*
-              Periodieke thread die om de 5s de map controleert op
-              nieuwe bestanden die de lokale bestanden bevat
-              **/
-            while(true) {
-                FileDiscovery.getInstance().discoverFiles();
-                try {
-                    Thread.sleep(5000);
-                } catch (InterruptedException e) {
-                    System.out.println("<!> newFilesChecker thread refused sleeping command <!>");
-                }
-            }
-        });
-        newFilesChecker.start();
-
         UIThread ui = new UIThread(setup);
         ui.start();
     }
