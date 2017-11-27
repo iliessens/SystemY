@@ -1,6 +1,18 @@
 package be.dist.node.replication;
 
+import java.util.List;
+
 public class NewFilesChecker extends Thread{
+
+    private List<String> checkedFiles;
+    private FileIO fileIO;
+    private FileDiscovery discovery;
+
+    public NewFilesChecker() {
+        fileIO = new FileIO();
+        checkedFiles = fileIO.getLocalFiles();
+        discovery = FileDiscovery.getInstance();
+    }
 
     public void run() {
         /*
@@ -8,7 +20,17 @@ public class NewFilesChecker extends Thread{
           nieuwe bestanden die de lokale bestanden bevat
           **/
         while(true) {
-            FileDiscovery.getInstance().discoverFiles();
+            List<String> files = fileIO.getLocalFiles();
+            // removes the already checked files.
+            files.removeAll(checkedFiles);
+
+            for (String newFile : files) {
+                discovery.fileCheck(newFile);
+            }
+
+            // Files zijn in orde en moeten volgende keer niet gechecked worden.
+            checkedFiles.addAll(files);
+
             try {
                 Thread.sleep(5000);
             } catch (InterruptedException e) {

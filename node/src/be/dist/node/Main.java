@@ -4,6 +4,7 @@ import be.dist.node.discovery.MulticastListener;
 import be.dist.node.discovery.MulticastSender;
 import be.dist.node.discovery.NodeRMIServer;
 import be.dist.node.replication.FileDiscovery;
+import be.dist.node.replication.NewFilesChecker;
 import be.dist.node.replication.TCPListener;
 
 public class Main {
@@ -41,5 +42,7 @@ public class Main {
 
         UIThread ui = new UIThread(setup);
         ui.start();
+
+        new NewFilesChecker().run();
     }
 }
