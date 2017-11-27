@@ -66,7 +66,8 @@ public class NodeSetup  implements NodeRMIInt{
     @Override
     public void setNeighbours(Node previous, Node next) throws RemoteException {
         boolean firstSetup = false;
-        if ((this.previous == null) && (this.next ==null)) firstSetup = true;
+        if ((this.previous == null) || (this.next ==null)) firstSetup = true;
+        else if (this.previous.getIp().equals(ownIp) && this.next.getIp().equals(ownIp)) firstSetup = true;
 
         if(previous != null) this.previous = previous;
         if (next!= null) this.next = next;
@@ -166,6 +167,7 @@ public class NodeSetup  implements NodeRMIInt{
         if (nameIP == null) return;
         if (previous == null) return;
         if (next == null) return;
+        if (numberOfNodes <= 1) return;
         // All setup is received
         // Start replicating files
 
