@@ -11,6 +11,7 @@ public class NewFilesChecker extends Thread{
     public NewFilesChecker() {
         fileIO = new FileIO();
         checkedFiles = fileIO.getLocalFiles();
+        discovery = FileDiscovery.getInstance();
     }
 
     public void run() {
