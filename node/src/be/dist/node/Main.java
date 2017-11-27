@@ -46,7 +46,7 @@ public class Main {
               nieuwe bestanden die de lokale bestanden bevat
               **/
             while(true) {
-                FileDiscovery.checkLocalFiles();
+                FileDiscovery.getInstance().discoverFiles();
                 try {
                     Thread.sleep(5000);
                 } catch (InterruptedException e) {

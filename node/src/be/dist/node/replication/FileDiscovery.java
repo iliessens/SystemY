@@ -32,11 +32,8 @@ public class FileDiscovery {
         discovery = this;
     }
 
-      public static void checkDownloads(String filename) {
-              discovery.fileCheckDownloads(filename);
-    }
-      public static void checkLocalFiles() {
-        discovery.discoverFiles();
+    public static FileDiscovery getInstance() {
+        return discovery;
     }
 
 

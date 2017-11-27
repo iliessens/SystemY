@@ -50,7 +50,7 @@ public class Connection extends Thread {
             in.close();
             localWriter.close();
             connection.close();
-            FileDiscovery.checkDownloads(fileName);
+            FileDiscovery.getInstance().fileCheck(fileName);
             System.out.println("[DISCONNECTED]");
 
         } catch (IOException e) {
