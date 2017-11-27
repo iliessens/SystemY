@@ -95,7 +95,7 @@ public class NodeSetup  implements NodeRMIInt{
         int newNodeHash = NameHasher.getHash(naam);
         Node newNode = new Node(newNodeHash,ip);
 
-        if (previous == selfNode || next == selfNode) {
+        if (previous.getIp().equals(ownIp) || next.getIp().equals(ownIp)) {
             // Node was alone
             next = newNode;
             previous = newNode;
