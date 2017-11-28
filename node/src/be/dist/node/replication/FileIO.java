@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -18,6 +19,7 @@ public class FileIO {
            return paths
                     .filter(Files::isRegularFile)
                    .map(Path::getFileName)
+                   .filter(Objects::nonNull)
                    .map(Path::toString)
                    .collect(Collectors.toList());
         }
