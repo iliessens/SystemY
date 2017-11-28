@@ -23,6 +23,7 @@ public class FileIO {
         }
         catch (IOException e) {
             System.out.println("Error making fileslisting!");
+            e.printStackTrace();
             return null;
         }
     }

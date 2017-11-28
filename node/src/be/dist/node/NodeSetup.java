@@ -97,9 +97,9 @@ public class NodeSetup  implements NodeRMIInt{
 
         if (previous.getIp().equals(ownIp) || next.getIp().equals(ownIp)) {
             // Node was alone
+            sendNeighbours(ip);
             next = newNode;
             previous = newNode;
-            sendNeighbours(ip);
         } else {
             if ((ownHash < newNodeHash) && (newNodeHash < next.getHash())) {
                 // Deze node is de vorige
@@ -123,8 +123,6 @@ public class NodeSetup  implements NodeRMIInt{
         try {
             NodeRMIInt remoteSetup = getRemoteSetup(ip);
 
-            int ownHash = NameHasher.getHash(name);
-            Node selfNode = new Node( ownHash, ownIp);
             remoteSetup.setNeighbours(selfNode,this.next);
         } catch (Exception e) {
             e.printStackTrace();
