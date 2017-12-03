@@ -49,9 +49,6 @@ public class UIThread extends Thread {
     }
 
     public void printNeighbours() {
-        Node previous = setup.getPrevious();
-        Node next = setup.getPrevious();
-        System.out.println("Previous: " + (previous != null ? previous.getIp() : "Not set"));
-        System.out.println("Next: " + (next != null ? next.getIp() : "Not set"));
+        setup.printNeighbours();
     }
 }

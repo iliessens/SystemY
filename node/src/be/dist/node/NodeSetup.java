@@ -16,13 +16,12 @@ import java.rmi.registry.Registry;
 public class NodeSetup  implements NodeRMIInt{
     private String nameIP;
     private int numberOfNodes;
-    private Node previous;
-    private Node next;
+    private volatile Node previous;
+    private volatile Node next;
     private String name;
     private String ownIp;
 
     private Node selfNode;
-
     private FileDiscovery discovery;
 
     public NodeSetup(String name, String ownIp) {
@@ -67,16 +66,24 @@ public class NodeSetup  implements NodeRMIInt{
     }
 
     @Override
-    public void setNeighbours(Node previous, Node next) throws RemoteException {
+    public synchronized void setNeighbours(Node newPrevious, Node newNext) throws RemoteException {
+        System.out.println("Received new next: "+(newNext == null ? "Not set" : newNext.getIp()));
+        System.out.println("Received new previous: "+(newPrevious == null ? "Not set" : newPrevious.getIp()));
         boolean firstSetup = false;
         if ((this.previous == null) || (this.next ==null)) firstSetup = true;
-        else if (previous == selfNode && next == selfNode) firstSetup = true;
+        else if (this.previous == selfNode && this.next == selfNode) firstSetup = true;
 
-        if(previous != null) this.previous = previous;
-        if (next!= null) this.next = next;
+        if(newPrevious != null) previous = newPrevious;
+        if (newNext!= null) next = newNext;
         System.out.println("New neighbours set");
 
         if(firstSetup) doReplicationWhenSetup();
+        printNeighbours();
+    }
+
+    public void printNeighbours() {
+        System.out.println("Previous: " + (previous != null ? previous.getIp() : "Not set"));
+        System.out.println("Next: " + (next != null ? next.getIp() : "Not set"));
     }
 
     /**
@@ -86,6 +93,7 @@ public class NodeSetup  implements NodeRMIInt{
      */
     @Override
     public boolean isAlive() throws RemoteException {
+        System.out.println("Received isAlive request...");
         return true;
     }
 
@@ -122,6 +130,7 @@ public class NodeSetup  implements NodeRMIInt{
         System.out.println("I am previous node. Sending neighbours...");
         try {
             NodeRMIInt remoteSetup = getRemoteSetup(ip);
+           // if(remoteSetup.isAlive()) System.out.println("Connection with remote node OK");
 
             remoteSetup.setNeighbours(selfNode,this.next);
         } catch (Exception e) {
