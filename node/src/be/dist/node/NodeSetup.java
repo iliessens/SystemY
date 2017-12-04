@@ -76,8 +76,9 @@ public class NodeSetup  implements NodeRMIInt{
         if(newPrevious != null) previous = newPrevious;
         if (newNext!= null) next = newNext;
         System.out.println("New neighbours set");
-
+        System.out.println(next.getIp()+"test robbe");
         if(firstSetup) doReplicationWhenSetup();
+        System.out.println(next.getIp()+"test2 robbe");
         printNeighbours();
     }
 
@@ -190,7 +191,7 @@ public class NodeSetup  implements NodeRMIInt{
             }
         });
         discoveryThread.start();
-        new NewFilesChecker().run();
+        new NewFilesChecker().start();
     }
 
 }
