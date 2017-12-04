@@ -14,7 +14,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
 public class NodeSetup  implements NodeRMIInt{
-    private String nameIP;
+    private volatile String nameIP;
     private int numberOfNodes;
     private volatile Node previous;
     private volatile Node next;
@@ -178,8 +178,11 @@ public class NodeSetup  implements NodeRMIInt{
 
     private synchronized void doReplicationWhenSetup() {
         if (nameIP == null) return;
+        System.out.println("Nameserver: "+nameIP);
         if (previous == null) return;
+        System.out.println("Previous: "+previous.getIp());
         if (next == null) return;
+        System.out.println("Next: "+next.getIp());
         if (numberOfNodes <= 1) return;
         // All setup is received
         // Start replicating files
