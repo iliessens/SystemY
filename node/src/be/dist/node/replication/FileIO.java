@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -35,6 +36,11 @@ public class FileIO {
                     .collect(Collectors.toMap(FileInformation::getFileName, x -> x));
         }
         return informationMap;
+    }
+
+    public Map<String,FileInformation> getLogFiles() {
+        Map logFiles = new HashMap<String,LogFiles>();
+        return logFiles;
     }
 
 }

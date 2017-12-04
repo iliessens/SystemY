@@ -134,4 +134,35 @@ public class FileDiscovery {
             e.printStackTrace();
         }
     }
+
+    public void fileCheckShutdownNode(){
+        for(Map.Entry<String,FileInformation> entry : io.getMap().entrySet()) {
+            if (entry.getValue().getLocal()) {
+                if (entry.getValue().getOwner()){
+                    //send remove file to the duplicate
+                }
+                else{
+                    //send shutdown to owner. if no downloads then remove file on owner side. else update logFile
+                }
+
+            }
+            else{
+                if (entry.getValue().getOwner()){
+                    //check Log file for duplicates
+                    //if previous is local of the file,
+                    // send file to prevous previous and send updated log file to previous (new owner)
+                    //else
+                    // send file to previous and updated logfile to previous (new owner)
+                }
+                else{
+                    //get previousNode from nodeSetup
+                    //get Owner file
+                    //if (getOwnerIP = previos IP)
+                    //Send file to previousPrevious then give new IP to Owner and remove my Ip to Owner (both from log file)
+                    //else
+                    // send file to previous and new IP to owner and remove my Ip to owner (both from log file)
+                }
+            }
+        }
+    }
 }
