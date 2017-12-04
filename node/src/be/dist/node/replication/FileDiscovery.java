@@ -18,6 +18,7 @@ public class FileDiscovery {
     private TCPSender sender;
 
     public FileDiscovery(String ServerIP, String ip, String name){
+        System.out.println("Filediscovery entered...");
         myIP = ip;
         myName = name;
         try {
@@ -30,6 +31,7 @@ public class FileDiscovery {
         this.discoverFiles();
 
         discovery = this;
+        System.out.println("Filediscovery starting...");
     }
 
     public static FileDiscovery getInstance() {

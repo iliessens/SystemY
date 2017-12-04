@@ -176,7 +176,7 @@ public class NodeSetup  implements NodeRMIInt{
         return remoteSetup;
     }
 
-    private void doReplicationWhenSetup() {
+    private synchronized void doReplicationWhenSetup() {
         if (nameIP == null) return;
         if (previous == null) return;
         if (next == null) return;
@@ -184,9 +184,12 @@ public class NodeSetup  implements NodeRMIInt{
         // All setup is received
         // Start replicating files
 
+        System.out.println("Node fully setup... Starting replication threads.");
+
         Thread discoveryThread = new Thread(new Runnable() {
             @Override
             public void run() {
+                System.out.println("Starting filediscovery");
                 discovery =  new FileDiscovery(nameIP, ownIp, name);
             }
         });
