@@ -131,6 +131,7 @@ public class NodeSetup  implements NodeRMIInt{
         try {
             NodeRMIInt remoteSetup = getRemoteSetup(ip);
            // if(remoteSetup.isAlive()) System.out.println("Connection with remote node OK");
+            System.out.println(this.next.getHash());
 
             remoteSetup.setNeighbours(selfNode,this.next);
         } catch (Exception e) {
