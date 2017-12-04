@@ -14,7 +14,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
 public class NodeSetup  implements NodeRMIInt{
-    private String nameIP;
+    private volatile String nameIP;
     private int numberOfNodes;
     private volatile Node previous;
     private volatile Node next;
@@ -76,8 +76,9 @@ public class NodeSetup  implements NodeRMIInt{
         if(newPrevious != null) previous = newPrevious;
         if (newNext!= null) next = newNext;
         System.out.println("New neighbours set");
-
+        System.out.println(next.getIp()+"test robbe");
         if(firstSetup) doReplicationWhenSetup();
+        System.out.println(next.getIp()+"test2 robbe");
         printNeighbours();
     }
 
@@ -175,16 +176,28 @@ public class NodeSetup  implements NodeRMIInt{
         return remoteSetup;
     }
 
-    private void doReplicationWhenSetup() {
+    private synchronized void doReplicationWhenSetup() {
         if (nameIP == null) return;
+        System.out.println("Nameserver: "+nameIP);
         if (previous == null) return;
+        System.out.println("Previous: "+previous.getIp());
         if (next == null) return;
+        System.out.println("Next: "+next.getIp());
         if (numberOfNodes <= 1) return;
         // All setup is received
         // Start replicating files
 
-        discovery =  new FileDiscovery(nameIP, ownIp, name);
-        new NewFilesChecker().run();
+        System.out.println("Node fully setup... Starting replication threads.");
+
+        Thread discoveryThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("Starting filediscovery");
+                discovery =  new FileDiscovery(nameIP, ownIp, name);
+            }
+        });
+        discoveryThread.start();
+        new NewFilesChecker().start();
     }
 
 }

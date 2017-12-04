@@ -16,7 +16,7 @@ public class TCPSender {
     public void send(String ipOmMeeTeVerbinden, String filePath) {
         Socket senderSocket = null;
         try {
-            System.out.println("CONNECTING ... ");
+            System.out.println("CONNECTING to "+ipOmMeeTeVerbinden);
             senderSocket = new Socket(ipOmMeeTeVerbinden, port);
             System.out.println("[CONNECTION ESTABLISHED]");
             File file = new File(filePath);
@@ -25,7 +25,7 @@ public class TCPSender {
 
             byte[] buffer = new byte[1024];
             int bytesRead;
-            System.out.println("TRANSFERING FILE ... ");
+            System.out.println("TRANSFERING FILE: "+filePath);
             byte[] tempNameBytes = filePath.substring(filePath.lastIndexOf('/') + 1).getBytes("UTF-8"); // get only filename
             byte[] nameSpace = Arrays.copyOf(tempNameBytes,255);
             out.write(nameSpace);

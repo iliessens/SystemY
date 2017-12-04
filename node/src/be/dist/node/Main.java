@@ -23,6 +23,11 @@ public class Main {
             System.out.println(ip);
         }
 
+        TCPListener tcpListener = new TCPListener(7899);
+        tcpListener.start();
+        System.out.println("TCP listener started");
+
+
         NodeSetup setup = new NodeSetup(name,ip);
         new NodeRMIServer(ip,setup);
 
@@ -34,9 +39,6 @@ public class Main {
         MulticastListener listener = new MulticastListener(ip,setup);
         listener.start();
         System.out.println("Multicast listener enabled...");
-
-        TCPListener tcpListener = new TCPListener(7899);
-        System.out.println("TCP listener started");
         System.out.println("Node staat volledig aan.");
 
         UIThread ui = new UIThread(setup);
