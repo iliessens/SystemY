@@ -16,7 +16,7 @@ public class TCPSender {
     public void send(String ipOmMeeTeVerbinden, String filePath) {
         Socket senderSocket = null;
         try {
-            System.out.println("CONNECTING ... ");
+            System.out.println("CONNECTING to "+ipOmMeeTeVerbinden);
             senderSocket = new Socket(ipOmMeeTeVerbinden, port);
             System.out.println("[CONNECTION ESTABLISHED]");
             File file = new File(filePath);
