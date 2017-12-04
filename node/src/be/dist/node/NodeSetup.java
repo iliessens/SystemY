@@ -6,6 +6,7 @@ import be.dist.common.Node;
 import be.dist.common.NodeRMIInt;
 import be.dist.node.discovery.FailureHandler;
 import be.dist.node.replication.FileDiscovery;
+import be.dist.node.replication.NewFilesChecker;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -15,16 +16,19 @@ import java.rmi.registry.Registry;
 public class NodeSetup  implements NodeRMIInt{
     private String nameIP;
     private int numberOfNodes;
-    private Node previous;
-    private Node next;
+    private volatile Node previous;
+    private volatile Node next;
     private String name;
     private String ownIp;
 
+    private Node selfNode;
     private FileDiscovery discovery;
 
     public NodeSetup(String name, String ownIp) {
         this.name = name;
         this.ownIp = ownIp;
+        int ownHash = NameHasher.getHash(name);
+        selfNode = new Node( ownHash, ownIp);
     }
 
     public Node getPrevious() {
@@ -50,8 +54,6 @@ public class NodeSetup  implements NodeRMIInt{
         System.out.println("Nameserver is at: "+nameserverIP);
 
         if(numberOfNodes <= 1) {
-            int ownHash = NameHasher.getHash(name);
-            Node selfNode = new Node( ownHash, ownIp);
             this.previous = selfNode;
             this.next = selfNode;
         }
@@ -64,16 +66,24 @@ public class NodeSetup  implements NodeRMIInt{
     }
 
     @Override
-    public void setNeighbours(Node previous, Node next) throws RemoteException {
+    public synchronized void setNeighbours(Node newPrevious, Node newNext) throws RemoteException {
+        System.out.println("Received new next: "+(newNext == null ? "Not set" : newNext.getIp()));
+        System.out.println("Received new previous: "+(newPrevious == null ? "Not set" : newPrevious.getIp()));
         boolean firstSetup = false;
         if ((this.previous == null) || (this.next ==null)) firstSetup = true;
-        else if (this.previous.getIp().equals(ownIp) && this.next.getIp().equals(ownIp)) firstSetup = true;
+        else if (this.previous == selfNode && this.next == selfNode) firstSetup = true;
 
-        if(previous != null) this.previous = previous;
-        if (next!= null) this.next = next;
+        if(newPrevious != null) previous = newPrevious;
+        if (newNext!= null) next = newNext;
         System.out.println("New neighbours set");
 
         if(firstSetup) doReplicationWhenSetup();
+        printNeighbours();
+    }
+
+    public void printNeighbours() {
+        System.out.println("Previous: " + (previous != null ? previous.getIp() : "Not set"));
+        System.out.println("Next: " + (next != null ? next.getIp() : "Not set"));
     }
 
     /**
@@ -83,6 +93,7 @@ public class NodeSetup  implements NodeRMIInt{
      */
     @Override
     public boolean isAlive() throws RemoteException {
+        System.out.println("Received isAlive request...");
         return true;
     }
 
@@ -92,10 +103,11 @@ public class NodeSetup  implements NodeRMIInt{
         int newNodeHash = NameHasher.getHash(naam);
         Node newNode = new Node(newNodeHash,ip);
 
-        if (previous == null || next == null) {
+        if (previous.getIp().equals(ownIp) || next.getIp().equals(ownIp)) {
+            // Node was alone
+            sendNeighbours(ip);
             next = newNode;
             previous = newNode;
-            sendNeighbours(ip);
         } else {
             if ((ownHash < newNodeHash) && (newNodeHash < next.getHash())) {
                 // Deze node is de vorige
@@ -118,9 +130,8 @@ public class NodeSetup  implements NodeRMIInt{
         System.out.println("I am previous node. Sending neighbours...");
         try {
             NodeRMIInt remoteSetup = getRemoteSetup(ip);
+           // if(remoteSetup.isAlive()) System.out.println("Connection with remote node OK");
 
-            int ownHash = NameHasher.getHash(name);
-            Node selfNode = new Node( ownHash, ownIp);
             remoteSetup.setNeighbours(selfNode,this.next);
         } catch (Exception e) {
             e.printStackTrace();
@@ -172,6 +183,7 @@ public class NodeSetup  implements NodeRMIInt{
         // Start replicating files
 
         discovery =  new FileDiscovery(nameIP, ownIp, name);
+        new NewFilesChecker().run();
     }
 
 }

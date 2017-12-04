@@ -3,8 +3,6 @@ package be.dist.node;
 import be.dist.node.discovery.MulticastListener;
 import be.dist.node.discovery.MulticastSender;
 import be.dist.node.discovery.NodeRMIServer;
-import be.dist.node.replication.FileDiscovery;
-import be.dist.node.replication.NewFilesChecker;
 import be.dist.node.replication.TCPListener;
 
 public class Main {
@@ -13,8 +11,8 @@ public class Main {
         String ip;
         String name;
         if(args.length < 2) {
-            ip= "10.2.1.10";
-            // String ip= "127.0.0.1";
+            //ip= "10.2.1.10";
+            ip= "127.0.0.1";
             name = "Imre";
 
             System.out.println("No command line parameters: using defaults");
@@ -26,10 +24,11 @@ public class Main {
         }
 
         NodeSetup setup = new NodeSetup(name,ip);
+        new NodeRMIServer(ip,setup);
 
         MulticastSender sender = new MulticastSender(ip);
         sender.sendHello(name);
-        new NodeRMIServer(ip,setup);
+
 
         // After setup
         MulticastListener listener = new MulticastListener(ip,setup);
@@ -42,7 +41,5 @@ public class Main {
 
         UIThread ui = new UIThread(setup);
         ui.start();
-
-        new NewFilesChecker().run();
     }
 }
