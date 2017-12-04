@@ -183,7 +183,13 @@ public class NodeSetup  implements NodeRMIInt{
         // All setup is received
         // Start replicating files
 
-        discovery =  new FileDiscovery(nameIP, ownIp, name);
+        Thread discoveryThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                discovery =  new FileDiscovery(nameIP, ownIp, name);
+            }
+        });
+        discoveryThread.start();
         new NewFilesChecker().run();
     }
 
