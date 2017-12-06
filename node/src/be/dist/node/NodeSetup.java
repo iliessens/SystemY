@@ -22,7 +22,7 @@ public class NodeSetup  implements NodeRMIInt{
     private String ownIp;
 
     private Node selfNode;
-    private boolean setupDone;
+    private volatile boolean setupDone = false;
 
     public NodeSetup(String name, String ownIp) {
         this.name = name;
@@ -177,7 +177,7 @@ public class NodeSetup  implements NodeRMIInt{
     }
 
     private synchronized void doReplicationWhenSetup() {
-        if(setupDone) {
+        if(!setupDone) {
             if (nameIP == null) return;
             System.out.println("Nameserver t: " + nameIP);
             if (previous == selfNode) return;
