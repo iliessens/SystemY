@@ -15,6 +15,7 @@ public class TCPSender {
 
     public void send(String ipOmMeeTeVerbinden, String filePath) {
         Socket senderSocket = null;
+        System.out.println("TCPSender: voor try");
         try {
             System.out.println("CONNECTING to "+ipOmMeeTeVerbinden);
             senderSocket = new Socket(ipOmMeeTeVerbinden, port);

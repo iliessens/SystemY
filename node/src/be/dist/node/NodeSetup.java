@@ -45,24 +45,30 @@ public class NodeSetup  implements NodeRMIInt{
 
     @Override
     public void setupNode(String nameserverIP, int numberOfNodes) throws RemoteException {
-        this.numberOfNodes = numberOfNodes;
-        this.nameIP = nameserverIP;
-
-        FailureHandler.connect(nameIP);
-
-        System.out.println("Setup from namingserver received, Nodes in network: "+numberOfNodes);
-        System.out.println("Nameserver is at: "+nameserverIP);
-
-        if(numberOfNodes <= 1) {
-            this.previous = selfNode;
-            this.next = selfNode;
+        if (numberOfNodes > 1) {
+            return;
         }
         else {
-            // Neighbours will be received from other node
-            next = null;
-            previous = null;
+            this.numberOfNodes = numberOfNodes;
+            this.nameIP = nameserverIP;
+
+            FailureHandler.connect(nameIP);
+
+            System.out.println("Setup from namingserver received, Nodes in network: "+numberOfNodes);
+            System.out.println("Nameserver is at: "+nameserverIP);
+
+            if(numberOfNodes <= 1) {
+                this.previous = selfNode;
+                this.next = selfNode;
+            }
+            else {
+                // Neighbours will be received from other node
+                next = null;
+                previous = null;
+            }
+            doReplicationWhenSetup();
         }
-        doReplicationWhenSetup();
+
     }
 
     @Override
@@ -106,13 +112,16 @@ public class NodeSetup  implements NodeRMIInt{
 
         if (previous.getIp().equals(ownIp) || next.getIp().equals(ownIp)) {
             // Node was alone
+            System.out.println("next3456667: " + newNode.getIp());
             sendNeighbours(ip);
+            System.out.println("next2: " + newNode.getIp());
             next = newNode;
             previous = newNode;
         } else {
             if ((ownHash < newNodeHash) && (newNodeHash < next.getHash())) {
                 // Deze node is de vorige
                 next = newNode;
+                System.out.println("next: " + newNode.getIp());
                 // Doorgeven naar nieuwe node
                 sendNeighbours(ip);
 
@@ -135,6 +144,7 @@ public class NodeSetup  implements NodeRMIInt{
             System.out.println(this.next.getHash());
 
             remoteSetup.setNeighbours(selfNode,this.next);
+            System.out.println("Geraakt hij hier of geraakt hij hier niet?");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -178,11 +188,11 @@ public class NodeSetup  implements NodeRMIInt{
 
     private synchronized void doReplicationWhenSetup() {
         if (nameIP == null) return;
-        System.out.println("Nameserver: "+nameIP);
+        System.out.println("Nameserver t: "+nameIP);
         if (previous == null) return;
-        System.out.println("Previous: "+previous.getIp());
+        System.out.println("Previous t: "+previous.getIp());
         if (next == null) return;
-        System.out.println("Next: "+next.getIp());
+        System.out.println("Next t: "+next.getIp());
         if (numberOfNodes <= 1) return;
         // All setup is received
         // Start replicating files
