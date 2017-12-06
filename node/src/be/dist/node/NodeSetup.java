@@ -45,29 +45,20 @@ public class NodeSetup  implements NodeRMIInt{
 
     @Override
     public void setupNode(String nameserverIP, int numberOfNodes) throws RemoteException {
-        if (numberOfNodes > 1) {
-            return;
+
+        this.numberOfNodes = numberOfNodes;
+        this.nameIP = nameserverIP;
+
+        FailureHandler.connect(nameIP);
+
+        System.out.println("Setup from namingserver received, Nodes in network: "+numberOfNodes);
+        System.out.println("Nameserver is at: "+nameserverIP);
+
+        if(numberOfNodes <= 1) {
+            this.previous = selfNode;
+            this.next = selfNode;
         }
-        else {
-            this.numberOfNodes = numberOfNodes;
-            this.nameIP = nameserverIP;
-
-            FailureHandler.connect(nameIP);
-
-            System.out.println("Setup from namingserver received, Nodes in network: "+numberOfNodes);
-            System.out.println("Nameserver is at: "+nameserverIP);
-
-            if(numberOfNodes <= 1) {
-                this.previous = selfNode;
-                this.next = selfNode;
-            }
-            else {
-                // Neighbours will be received from other node
-                next = null;
-                previous = null;
-            }
-            doReplicationWhenSetup();
-        }
+        doReplicationWhenSetup();
 
     }
 
