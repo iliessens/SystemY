@@ -112,6 +112,7 @@ public class NodeSetup  implements NodeRMIInt{
             System.out.println("next2: " + newNode.getIp());
             next = newNode;
             previous = newNode;
+            if(firstSetup) doReplicationWhenSetup();
         } else {
             if ((ownHash < newNodeHash) && (newNodeHash < next.getHash())) {
                 // Deze node is de vorige
@@ -122,12 +123,10 @@ public class NodeSetup  implements NodeRMIInt{
 
                 // TODO send files to new node
                 //discovery.filecheckNewNode(ip);
-                if(firstSetup) doReplicationWhenSetup();
             }
             if ((previous.getHash() < newNodeHash) && (ownHash > newNodeHash)) {
                 // Deze node is de volgende van de nieuwe node --> De nieuwe is de vorige
                 previous = newNode;
-                if(firstSetup) doReplicationWhenSetup();
             }
         }
     }
