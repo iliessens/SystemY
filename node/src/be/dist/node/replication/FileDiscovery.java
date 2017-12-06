@@ -47,6 +47,7 @@ public class FileDiscovery {
     }
 
     public void fileCheck(String fileName)  {
+        System.out.println("Checking file: "+fileName);
         try {
             FileInformation fileInfo;
             String fileOwnerIP = remoteSetup.getOwner(fileName);

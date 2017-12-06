@@ -26,6 +26,7 @@ public class FileIO {
                 for (final File fileEntry : folder.listFiles()) {
                     if (!fileEntry.isDirectory()) {
                         files.add(fileEntry.getName());
+                        System.out.println("File discovered: "+fileEntry.getName());
                     }
                 }
             }
