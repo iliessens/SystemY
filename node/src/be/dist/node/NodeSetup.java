@@ -58,6 +58,7 @@ public class NodeSetup  implements NodeRMIInt{
             this.previous = selfNode;
             this.next = selfNode;
         }
+        new FileDiscovery(nameIP, ownIp, name);
         doReplicationWhenSetup();
 
     }
@@ -194,7 +195,7 @@ public class NodeSetup  implements NodeRMIInt{
                 @Override
                 public void run() {
                     System.out.println("Starting filediscovery");
-                    new FileDiscovery(nameIP, ownIp, name);
+                    FileDiscovery.getInstance().discoverFiles();
                 }
             });
             discoveryThread.start();
