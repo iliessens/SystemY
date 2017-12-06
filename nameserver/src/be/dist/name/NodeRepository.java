@@ -136,4 +136,8 @@ public class NodeRepository implements NamingServerInt {
         return null; // No result found
     }
 
+    public int getNumberOfNodes () {
+        return nodes.size();
+    }
+
 }
