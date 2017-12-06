@@ -180,9 +180,9 @@ public class NodeSetup  implements NodeRMIInt{
     private synchronized void doReplicationWhenSetup() {
         if (nameIP == null) return;
         System.out.println("Nameserver t: "+nameIP);
-        if (previous == null) return;
+        if (previous == selfNode) return;
         System.out.println("Previous t: "+previous.getIp());
-        if (next == null) return;
+        if (next == selfNode) return;
         System.out.println("Next t: "+next.getIp());
         if (numberOfNodes <= 1) return;
         // All setup is received
