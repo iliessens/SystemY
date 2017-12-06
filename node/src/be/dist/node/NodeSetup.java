@@ -45,10 +45,12 @@ public class NodeSetup  implements NodeRMIInt{
 
     @Override
     public void setupNode(String nameserverIP, int numberOfNodes) throws RemoteException {
-        new FileDiscovery(nameIP, ownIp, name);
 
         this.numberOfNodes = numberOfNodes;
         this.nameIP = nameserverIP;
+
+        new FileDiscovery(nameIP, ownIp, name);
+
 
         FailureHandler.connect(nameIP);
 
