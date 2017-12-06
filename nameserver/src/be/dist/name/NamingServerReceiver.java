@@ -38,7 +38,7 @@ public class NamingServerReceiver {
             start = true;
             this.startReceiver();
         }
-        catch(IOException ex){System.out.println("error error");}
+        catch(IOException ex){System.out.println("error error multicast reciever not running");}
     }
     public void startReceiver() throws IOException{
         while(start)

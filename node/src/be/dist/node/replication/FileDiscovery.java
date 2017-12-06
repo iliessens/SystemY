@@ -28,10 +28,7 @@ public class FileDiscovery {
             e.printStackTrace();
         }
         sender = new TCPSender(7899);
-        this.discoverFiles();
-
         discovery = this;
-        System.out.println("Filediscovery starting...");
     }
 
     public static FileDiscovery getInstance() {
@@ -40,6 +37,7 @@ public class FileDiscovery {
 
 
     public void discoverFiles() {
+        System.out.println("Filediscovery starting... (die van imre) robbe print");
         io =  new FileIO();
         for(String name : io.getLocalFiles()) {
             fileCheck(name);
