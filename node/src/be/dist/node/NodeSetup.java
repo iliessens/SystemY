@@ -45,6 +45,7 @@ public class NodeSetup  implements NodeRMIInt{
 
     @Override
     public void setupNode(String nameserverIP, int numberOfNodes) throws RemoteException {
+        new FileDiscovery(nameIP, ownIp, name);
 
         this.numberOfNodes = numberOfNodes;
         this.nameIP = nameserverIP;
@@ -58,7 +59,6 @@ public class NodeSetup  implements NodeRMIInt{
             this.previous = selfNode;
             this.next = selfNode;
         }
-        new FileDiscovery(nameIP, ownIp, name);
         doReplicationWhenSetup();
 
     }
@@ -68,8 +68,7 @@ public class NodeSetup  implements NodeRMIInt{
         System.out.println("Received new next: "+(newNext == null ? "Not set" : newNext.getIp()));
         System.out.println("Received new previous: "+(newPrevious == null ? "Not set" : newPrevious.getIp()));
         boolean firstSetup = false;
-        if ((this.previous == null) || (this.next ==null)) firstSetup = true;
-        else if (this.previous == selfNode && this.next == selfNode) firstSetup = true;
+        if (this.previous == selfNode || this.next == selfNode) firstSetup = true;
 
         if(newPrevious != null) previous = newPrevious;
         if (newNext!= null) next = newNext;
@@ -179,7 +178,7 @@ public class NodeSetup  implements NodeRMIInt{
 
     private synchronized void doReplicationWhenSetup() {
         if(!setupDone) {
-            if (nameIP == null) return;
+            if ("".equals(nameIP)) return;
             System.out.println("Nameserver t: " + nameIP);
             if (previous == selfNode) return;
             System.out.println("Previous t: " + previous.getIp());
