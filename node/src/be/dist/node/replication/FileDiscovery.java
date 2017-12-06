@@ -21,6 +21,7 @@ public class FileDiscovery {
         System.out.println("Filediscovery entered...");
         myIP = ip;
         myName = name;
+        io =  new FileIO();
         try {
             Registry registry = LocateRegistry.getRegistry(ServerIP);
             remoteSetup = (NamingServerInt) registry.lookup("NamingServer");
@@ -38,7 +39,6 @@ public class FileDiscovery {
 
     public void discoverFiles() {
         System.out.println("Filediscovery starting... (die van imre) robbe print");
-        io =  new FileIO();
         for(String name : io.getLocalFiles()) {
             fileCheck(name);
         }

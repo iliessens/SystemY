@@ -98,6 +98,9 @@ public class NodeSetup  implements NodeRMIInt{
 
     public void processAnnouncement(String ip, String naam) {
         System.out.println("Announcement from new node received");
+        boolean firstSetup = false;
+        if (this.previous == selfNode || this.next == selfNode) firstSetup = true;
+
         int ownHash = NameHasher.getHash(naam);
         int newNodeHash = NameHasher.getHash(naam);
         Node newNode = new Node(newNodeHash,ip);
@@ -109,6 +112,7 @@ public class NodeSetup  implements NodeRMIInt{
             System.out.println("next2: " + newNode.getIp());
             next = newNode;
             previous = newNode;
+            if(firstSetup) doReplicationWhenSetup();
         } else {
             if ((ownHash < newNodeHash) && (newNodeHash < next.getHash())) {
                 // Deze node is de vorige
