@@ -98,8 +98,6 @@ public class NodeSetup  implements NodeRMIInt{
 
     public void processAnnouncement(String ip, String naam) {
         System.out.println("Announcement from new node received");
-        boolean firstSetup = false;
-        if (this.previous == selfNode || this.next == selfNode) firstSetup = true;
 
         int ownHash = NameHasher.getHash(naam);
         int newNodeHash = NameHasher.getHash(naam);
@@ -112,7 +110,7 @@ public class NodeSetup  implements NodeRMIInt{
             System.out.println("next2: " + newNode.getIp());
             next = newNode;
             previous = newNode;
-            if(firstSetup) doReplicationWhenSetup();
+            doReplicationWhenSetup();
         } else {
             if ((ownHash < newNodeHash) && (newNodeHash < next.getHash())) {
                 // Deze node is de vorige
@@ -190,7 +188,18 @@ public class NodeSetup  implements NodeRMIInt{
             System.out.println("Previous t: " + previous.getIp());
             if (next == selfNode) return;
             System.out.println("Next t: " + next.getIp());
-            if (numberOfNodes <= 1) return;
+
+            // query nameserver for number of nodes
+            try {
+                if (nameIP != null) {
+                    Registry registry = LocateRegistry.getRegistry(nameIP);
+                    NamingServerInt nameServer = (NamingServerInt) registry.lookup("NamingServer");
+                    if (nameServer.getNumberOfNodes() <= 1) return;
+                }
+            }
+            catch (RemoteException | NotBoundException e) {
+                e.printStackTrace();
+            }
             // All setup is received
             // Start replicating files
 
