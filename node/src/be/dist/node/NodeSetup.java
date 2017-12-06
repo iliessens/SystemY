@@ -22,7 +22,7 @@ public class NodeSetup  implements NodeRMIInt{
     private String ownIp;
 
     private Node selfNode;
-    private FileDiscovery discovery;
+    private boolean setupDone;
 
     public NodeSetup(String name, String ownIp) {
         this.name = name;
@@ -73,7 +73,6 @@ public class NodeSetup  implements NodeRMIInt{
         if(newPrevious != null) previous = newPrevious;
         if (newNext!= null) next = newNext;
         System.out.println("New neighbours set");
-        System.out.println(next.getIp()+"test robbe");
         if(firstSetup) doReplicationWhenSetup();
         System.out.println(next.getIp()+"test2 robbe");
         printNeighbours();
@@ -178,27 +177,30 @@ public class NodeSetup  implements NodeRMIInt{
     }
 
     private synchronized void doReplicationWhenSetup() {
-        if (nameIP == null) return;
-        System.out.println("Nameserver t: "+nameIP);
-        if (previous == selfNode) return;
-        System.out.println("Previous t: "+previous.getIp());
-        if (next == selfNode) return;
-        System.out.println("Next t: "+next.getIp());
-        if (numberOfNodes <= 1) return;
-        // All setup is received
-        // Start replicating files
+        if(setupDone) {
+            if (nameIP == null) return;
+            System.out.println("Nameserver t: " + nameIP);
+            if (previous == selfNode) return;
+            System.out.println("Previous t: " + previous.getIp());
+            if (next == selfNode) return;
+            System.out.println("Next t: " + next.getIp());
+            if (numberOfNodes <= 1) return;
+            // All setup is received
+            // Start replicating files
 
-        System.out.println("Node fully setup... Starting replication threads.");
+            System.out.println("Node fully setup... Starting replication threads.");
 
-        Thread discoveryThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                System.out.println("Starting filediscovery");
-                discovery =  new FileDiscovery(nameIP, ownIp, name);
-            }
-        });
-        discoveryThread.start();
-        new NewFilesChecker().start();
+            Thread discoveryThread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    System.out.println("Starting filediscovery");
+                    new FileDiscovery(nameIP, ownIp, name);
+                }
+            });
+            discoveryThread.start();
+            new NewFilesChecker().start();
+            setupDone = true;
+        }
     }
 
 }
