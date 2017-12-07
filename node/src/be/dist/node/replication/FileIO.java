@@ -1,17 +1,12 @@
 package be.dist.node.replication;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class FileIO {
 
-    private Map<String,FileInformation> informationMap;
+    private Map<String,NodeFileInformation> informationMap;
 
     public List<String> getLocalFiles() {
 //        try (Stream<Path> paths = Files.walk(Paths.get("files/original/"))) {
@@ -33,17 +28,17 @@ public class FileIO {
             return files;
     }
 
-    public Map<String,FileInformation> getMap() {
+    public Map<String,NodeFileInformation> getMap() {
         if(informationMap == null) {
             informationMap = getLocalFiles()
                     .stream()
-                    .map(x -> new FileInformation(true, null, x))
-                    .collect(Collectors.toMap(FileInformation::getFileName, x -> x));
+                    .map(x -> new NodeFileInformation(true, null, x))
+                    .collect(Collectors.toMap(NodeFileInformation::getFileName, x -> x));
         }
         return informationMap;
     }
 
-    public Map<String,FileInformation> getLogFiles() {
+    public Map<String,NodeFileInformation> getLogFiles() {
         Map logFiles = new HashMap<String,LogFiles>();
         return logFiles;
     }

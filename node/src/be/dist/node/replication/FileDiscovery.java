@@ -36,6 +36,9 @@ public class FileDiscovery {
         return discovery;
     }
 
+    public Map<String,NodeFileInformation> getFileList() {
+        return io.getMap();
+    }
 
     public void discoverFiles() {
         System.out.println("Filediscovery starting... (die van imre) robbe print");
@@ -47,13 +50,13 @@ public class FileDiscovery {
     public void fileCheck(String fileName)  {
         System.out.println("Checking file: "+fileName);
         try {
-            FileInformation fileInfo;
+            NodeFileInformation fileInfo;
             String fileOwnerIP = remoteSetup.getOwner(fileName);
             String filePath = "files/original/"+fileName;
 
             fileInfo = io.getMap().get(fileName);
             if (fileInfo == null) { // new file not yet in map
-                fileInfo = new FileInformation(true,false,fileName);
+                fileInfo = new NodeFileInformation(true,false,fileName);
                 io.getMap().put(fileName,fileInfo);
             }
 
@@ -79,15 +82,15 @@ public class FileDiscovery {
 
     public void fileCheckDownloads(String fileName)  {
         try {
-            FileInformation fileInfo;
+            NodeFileInformation fileInfo;
             String fileOwner = remoteSetup.getOwner(fileName);
             if (fileOwner.equals(myIP)) {
                 String fileDuplicate = remoteSetup.getOwner(myName);
-                fileInfo = new FileInformation(false, true, fileName);
+                fileInfo = new NodeFileInformation(false, true, fileName);
                 io.getMap().put(fileName, fileInfo);
 
             } else {
-                fileInfo = new FileInformation(false, false, fileName);
+                fileInfo = new NodeFileInformation(false, false, fileName);
                 io.getMap().put(fileName, fileInfo);
             }
         }
@@ -101,9 +104,9 @@ public class FileDiscovery {
     public void fileCheckNewNode(String ipNewNode) {
         try {
             //hij loopt over alle files die hij heeft, zowel origineel als replicatie.
-        for(Map.Entry<String,FileInformation> entry : io.getMap().entrySet()) {
+        for(Map.Entry<String,NodeFileInformation> entry : io.getMap().entrySet()) {
             String fileName = entry.getKey();
-            FileInformation fileInfo = entry.getValue();
+            NodeFileInformation fileInfo = entry.getValue();
             String fileOwner = null;
             String filePath = null;
             fileOwner = remoteSetup.getOwner(fileName);
@@ -137,7 +140,7 @@ public class FileDiscovery {
     }
 
     public void fileCheckShutdownNode(){
-        for(Map.Entry<String,FileInformation> entry : io.getMap().entrySet()) {
+        for(Map.Entry<String,NodeFileInformation> entry : io.getMap().entrySet()) {
             if (entry.getValue().getLocal()) {
                 if (entry.getValue().getOwner()){
                     //send remove file to the duplicate
