@@ -143,14 +143,7 @@ public class FileDiscovery {
                     //send remove file to the duplicate
                     //String ipDuplicate = entry.getValue().getDownloadLocaties();
 
-                    try {
-                        Registry registry = LocateRegistry.getRegistry(ipDuplicate);
-                        remoteSetup = (NamingServerInt) registry.lookup("nodeSetup");
-
-
-                    } catch (RemoteException | NotBoundException e) {
-                        e.printStackTrace();
-                    }
+                    
 
                 }
                 else{
