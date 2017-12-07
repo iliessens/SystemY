@@ -13,11 +13,12 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.Map;
 
-public class FailureAgent implements Runnable, Serializable {
+public class FailureAgent implements Agent {
 
     private String failedIP;
     private String startIP;
     private boolean firstRun;
+    private boolean stopCirculating;
 
     public FailureAgent(String failedIP, String startIP) {
         this.failedIP = failedIP;
@@ -28,7 +29,7 @@ public class FailureAgent implements Runnable, Serializable {
     @Override
     public void run() {
         if((!firstRun)&&(startIP.equals(LocalIP.getLocalIP()))) {
-            // stop looping in the network
+            stopCirculating = true;
         }
 
         FileDiscovery discovery = FileDiscovery.getInstance();
@@ -69,4 +70,8 @@ public class FailureAgent implements Runnable, Serializable {
         return "";
     }
 
+    @Override
+    public boolean getStopFlag() {
+        return stopCirculating;
+    }
 }

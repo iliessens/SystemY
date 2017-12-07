@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class FileListAgent implements Runnable, Serializable {
+public class FileListAgent implements Agent{
     private Map<String,AgentFile> fileList; // boolean indicates lock
 
     public FileListAgent() {
@@ -58,4 +58,8 @@ public class FileListAgent implements Runnable, Serializable {
                         .setLockedBy(LocalIP.getLocalIP()));
     }
 
+    @Override
+    public boolean getStopFlag() {
+        return false;
+    }
 }
