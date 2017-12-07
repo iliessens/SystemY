@@ -19,9 +19,9 @@ public class FileIO {
             final File folder = new File("files/original");
             if (folder.listFiles() != null) {
                 for (final File fileEntry : folder.listFiles()) {
-                    if (!fileEntry.isDirectory()) {
+                    if ((!fileEntry.isDirectory())&&(!fileEntry.isHidden())) { // check if directory or hidden
                         files.add(fileEntry.getName());
-                        System.out.println("File discovered: "+fileEntry.getName());
+                        //System.out.println("File discovered: "+fileEntry.getName());
                     }
                 }
             }
