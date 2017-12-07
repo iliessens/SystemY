@@ -4,6 +4,7 @@ import be.dist.common.NameHasher;
 import be.dist.common.NamingServerInt;
 import be.dist.common.Node;
 import be.dist.common.NodeRMIInt;
+import be.dist.node.agents.FileListAgent;
 import be.dist.node.discovery.FailureHandler;
 import be.dist.node.replication.FileDiscovery;
 import be.dist.node.replication.NewFilesChecker;
@@ -60,9 +61,17 @@ public class NodeSetup  implements NodeRMIInt{
         if(numberOfNodes <= 1) {
             this.previous = selfNode;
             this.next = selfNode;
+            startAgent();
+
         }
         doReplicationWhenSetup();
 
+    }
+
+    private void startAgent() {
+        // start fileList agent in the network
+        FileListAgent agent =  new FileListAgent();
+        runAgent(agent);
     }
 
     @Override
@@ -219,7 +228,21 @@ public class NodeSetup  implements NodeRMIInt{
     }
 
     public void runAgent(Runnable agent) {
+        Thread agentThread = new Thread(agent);
+        agentThread.start(); // start agent thread
 
+        try {
+            agentThread.join(); // wait untill ready
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        NodeRMIInt remote = getRemoteSetup(next.getIp());
+        try {
+            remote.runAgent(agent);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
     }
 
 }

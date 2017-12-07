@@ -4,10 +4,13 @@ import be.dist.node.FileInformation;
 
 public class AgentFile extends FileInformation {
     private String lockedBy;
+    private String ownerIP;
+    private boolean lockRequest; // only useful in local list
 
-    public AgentFile(String filename, String lockedBy) {
+    public AgentFile(String filename, String ownerIP) {
         super(filename);
-        this.lockedBy = lockedBy;
+        this.lockedBy = null;
+        this.ownerIP = ownerIP;
     }
 
     public String getLockedBy() {
@@ -20,5 +23,20 @@ public class AgentFile extends FileInformation {
 
     public boolean isLocked() {
         return lockedBy != null;
+    }
+
+    public String getOwnerIP() {
+        return ownerIP;
+    }
+
+    public void requestLock() {
+        lockRequest = true;
+    }
+
+    public void removeLockRequest() {
+        lockRequest = false;
+    }
+    public boolean hashLockRequest() {
+        return  lockRequest;
     }
  }

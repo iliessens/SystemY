@@ -22,15 +22,40 @@ public class FileListAgent implements Runnable, Serializable {
        FileDiscovery discovery =  FileDiscovery.getInstance(); // Get the local filediscovery
         Map<String,NodeFileInformation> list = discovery.getFileList();
 
+        removeLocalLocks();
+
         List<String> localFiles = list.entrySet().stream()
                 .filter(x -> x.getValue().getOwner()) // only keep owned files
                 .map(Map.Entry::getKey) // only keep filename
                 .collect(Collectors.toList());
 
         for (String name: localFiles) {
-            fileList.put(name,new AgentFile(name,null));
+            if(!fileList.containsKey(name)) { // bestand zit er nog niet in
+                fileList.put(name, new AgentFile(name, LocalIP.getLocalIP()));
+            }
         }
+
+        processLocks();
+
+        // save current list to local node
+        LocalFileList.setFileMap(fileList);
         
+    }
+
+    // remove locks set earlier by this node
+    private void removeLocalLocks() {
+        fileList.entrySet().stream()
+                .filter(x -> x.getValue().getLockedBy().equals(LocalIP.getLocalIP()))
+                .forEach(x -> x.getValue().setLockedBy(null));
+    }
+
+    // add locks requested by this node
+    private void processLocks() {
+        Map<String,AgentFile> localList = LocalFileList.getFileMap();
+        localList.entrySet().stream()
+                .filter(x -> x.getValue().hashLockRequest())
+                .forEach(x -> fileList.get(x.getKey())
+                        .setLockedBy(LocalIP.getLocalIP()));
     }
 
     public Map<String, AgentFile> getFileList() {
