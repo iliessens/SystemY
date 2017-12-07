@@ -143,7 +143,7 @@ public class FileDiscovery {
                     //send remove file to the duplicate
                     //String ipDuplicate = entry.getValue().getDownloadLocaties();
 
-                    
+
 
                 }
                 else{

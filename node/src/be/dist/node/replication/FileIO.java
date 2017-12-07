@@ -7,6 +7,12 @@ import java.util.stream.Collectors;
 public class FileIO {
 
     private Map<String,FileInformation> informationMap;
+    private HashMap<String,Bestandsfiche> bestandsfiches;
+
+    public FileIO()
+    {
+        bestandsfiches = new HashMap<String,Bestandsfiche>();
+    }
 
     public List<String> getLocalFiles() {
 //        try (Stream<Path> paths = Files.walk(Paths.get("files/original/"))) {
@@ -39,8 +45,7 @@ public class FileIO {
     }
 
     public Map<String,Bestandsfiche> getBestandsfiches() {
-        Map fiches = new HashMap<String,Bestandsfiche>();
-        return fiches;
+        return bestandsfiches;
     }
 
 }
