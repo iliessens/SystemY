@@ -141,6 +141,17 @@ public class FileDiscovery {
             if (entry.getValue().getLocal()) {
                 if (entry.getValue().getOwner()){
                     //send remove file to the duplicate
+                    //String ipDuplicate = entry.getValue().getDownloadLocaties();
+
+                    try {
+                        Registry registry = LocateRegistry.getRegistry(ipDuplicate);
+                        remoteSetup = (NamingServerInt) registry.lookup("nodeSetup");
+
+
+                    } catch (RemoteException | NotBoundException e) {
+                        e.printStackTrace();
+                    }
+
                 }
                 else{
                     //send shutdown to owner. if no downloads then remove file on owner side. else update logFile
