@@ -218,4 +218,8 @@ public class NodeSetup  implements NodeRMIInt{
         }
     }
 
+    public void runAgent(Runnable agent) {
+
+    }
+
 }
