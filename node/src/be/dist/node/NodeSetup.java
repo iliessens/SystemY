@@ -15,7 +15,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
 public class NodeSetup  implements NodeRMIInt{
-    private volatile String nameIP;
+    public static volatile String nameIP;
     private int numberOfNodes;
     private volatile Node previous;
     private volatile Node next;
@@ -40,7 +40,7 @@ public class NodeSetup  implements NodeRMIInt{
         return next;
     }
 
-    public String getNameServerIP() {
+    public static String getNameServerIP() {
         return nameIP;
     }
 
@@ -48,7 +48,7 @@ public class NodeSetup  implements NodeRMIInt{
     public void setupNode(String nameserverIP, int numberOfNodes) throws RemoteException {
 
         this.numberOfNodes = numberOfNodes;
-        this.nameIP = nameserverIP;
+        nameIP = nameserverIP;
 
         new FileDiscovery(nameIP, ownIp, name);
 

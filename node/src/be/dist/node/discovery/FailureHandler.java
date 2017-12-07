@@ -37,12 +37,10 @@ public class FailureHandler {
             remoteSetup = (NodeSetup) registry.lookup("nodeSetup");
             remoteSetup.setNeighbours(null,nextNode);
 
-
-            // remove from naming server
-            namingServer.removeNodeByIp(ip);
         }
         catch (RemoteException | NotBoundException e) {
             e.printStackTrace();
         }
     }
+
 }
