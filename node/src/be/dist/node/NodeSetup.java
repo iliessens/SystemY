@@ -4,6 +4,7 @@ import be.dist.common.NameHasher;
 import be.dist.common.NamingServerInt;
 import be.dist.common.Node;
 import be.dist.common.NodeRMIInt;
+import be.dist.node.agents.Agent;
 import be.dist.node.agents.FileListAgent;
 import be.dist.node.discovery.FailureHandler;
 import be.dist.node.replication.FileDiscovery;
@@ -227,7 +228,7 @@ public class NodeSetup  implements NodeRMIInt{
         }
     }
 
-    public void runAgent(Runnable agent) {
+    public void runAgent(Agent agent) {
         Thread agentThread = new Thread(agent);
         agentThread.start(); // start agent thread
 
@@ -237,11 +238,14 @@ public class NodeSetup  implements NodeRMIInt{
             e.printStackTrace();
         }
 
-        NodeRMIInt remote = getRemoteSetup(next.getIp());
-        try {
-            remote.runAgent(agent);
-        } catch (RemoteException e) {
-            e.printStackTrace();
+        if (!agent.getStopFlag()) {
+
+            NodeRMIInt remote = getRemoteSetup(next.getIp());
+            try {
+                remote.runAgent(agent);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
         }
     }
 

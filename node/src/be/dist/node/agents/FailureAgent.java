@@ -23,15 +23,10 @@ public class FailureAgent implements Agent {
     public FailureAgent(String failedIP, String startIP) {
         this.failedIP = failedIP;
         this.startIP = startIP;
-        firstRun = true;
     }
 
     @Override
     public void run() {
-        if((!firstRun)&&(startIP.equals(LocalIP.getLocalIP()))) {
-            stopCirculating = true;
-        }
-
         FileDiscovery discovery = FileDiscovery.getInstance();
         Map<String,NodeFileInformation> localFiles =  discovery.getFileList();
 
@@ -40,7 +35,11 @@ public class FailureAgent implements Agent {
                 .filter(x -> getOwnerIP(x.getKey()).equals(failedIP))
                 .forEach(x -> failedFileHandler(x.getKey()));
 
-        firstRun = false;
+        if(startIP.equals(LocalIP.getLocalIP())) {
+            // done, stop circulating and remove from nameserver
+            stopCirculating = true;
+            removeFromNameserver();
+        }
     }
 
     private void failedFileHandler(String filename) {
