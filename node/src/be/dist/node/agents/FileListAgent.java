@@ -58,7 +58,4 @@ public class FileListAgent implements Runnable, Serializable {
                         .setLockedBy(LocalIP.getLocalIP()));
     }
 
-    public Map<String, AgentFile> getFileList() {
-        return fileList;
-    }
 }
