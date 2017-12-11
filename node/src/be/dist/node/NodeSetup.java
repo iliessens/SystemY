@@ -5,6 +5,7 @@ import be.dist.common.NamingServerInt;
 import be.dist.common.Node;
 import be.dist.common.NodeRMIInt;
 import be.dist.node.discovery.FailureHandler;
+import be.dist.node.replication.Bestandsfiche;
 import be.dist.node.replication.FileDiscovery;
 import be.dist.node.replication.NewFilesChecker;
 
@@ -20,6 +21,7 @@ public class NodeSetup  implements NodeRMIInt{
     private volatile Node next;
     private String name;
     private String ownIp;
+    private FileDiscovery fileDiscovery;
 
     private Node selfNode;
     private volatile boolean setupDone = false;
@@ -49,7 +51,7 @@ public class NodeSetup  implements NodeRMIInt{
         this.numberOfNodes = numberOfNodes;
         this.nameIP = nameserverIP;
 
-        new FileDiscovery(nameIP, ownIp, name);
+        fileDiscovery = new FileDiscovery(nameIP, ownIp, name);
 
 
         FailureHandler.connect(nameIP);
@@ -216,6 +218,12 @@ public class NodeSetup  implements NodeRMIInt{
             new NewFilesChecker().start();
             setupDone = true;
         }
+    }
+
+    public void SendBestandsFiche(Bestandsfiche bestandsfiche, String filename){
+        fileDiscovery.getIO().recieveBestandsfiche(bestandsfiche, filename);
+        //TODO
+        //Zet dit als rmi
     }
 
 

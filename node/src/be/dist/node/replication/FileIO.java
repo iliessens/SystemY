@@ -48,4 +48,12 @@ public class FileIO {
         return bestandsfiches;
     }
 
+    public void newBestandsfiche(String filename, String localip, String replicatieip){
+        Bestandsfiche bestandsfiche = new Bestandsfiche(localip, replicatieip);
+    }
+
+    public void recieveBestandsfiche(Bestandsfiche bestandsfiche, String filename){
+        getBestandsfiches().put(filename, bestandsfiche);
+    }
+
 }
