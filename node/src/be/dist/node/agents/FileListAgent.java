@@ -1,15 +1,15 @@
 package be.dist.node.agents;
 
+import be.dist.common.Agent;
 import be.dist.node.replication.FileDiscovery;
 import be.dist.node.replication.NodeFileInformation;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class FileListAgent implements Agent{
+public class FileListAgent implements Agent {
     private Map<String,AgentFile> fileList; // boolean indicates lock
 
     public FileListAgent() {

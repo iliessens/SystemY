@@ -1,13 +1,11 @@
 package be.dist.node.agents;
 
+import be.dist.common.Agent;
 import be.dist.common.NamingServerInt;
-import be.dist.node.NodeSetup;
-import be.dist.node.discovery.FailureHandler;
 import be.dist.node.replication.FileDiscovery;
 import be.dist.node.replication.NodeFileInformation;
 import be.dist.node.replication.TCPSender;
 
-import java.io.Serializable;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -44,27 +42,26 @@ public class FailureAgent implements Agent {
     }
 
     private void failedFileHandler(Map.Entry<String,NodeFileInformation> file) {
-        String newOwner  = getNewOwner(file.getKey());
-        TCPSender sender = new TCPSender(7899);
-        String path;
-        if(file.getValue().getLocal()) { // file was local
-            path = "files/original/" + file.getKey();
-        }
-        else {
-            path = "files/replication/" + file.getKey();
-        }
-        sender.send(newOwner, path);
-    }
-
-    private String getNewOwner(String filename) {
         try {
-            Registry registry = LocateRegistry.getRegistry();
-            NamingServerInt nameServer = (NamingServerInt) registry.lookup("NamingServer");
-            nameServer.getPrevious(failedIP);
+            String newOwner = getNewOwner(file.getKey());
+            TCPSender sender = new TCPSender(7899);
+            String path;
+            if (file.getValue().getLocal()) { // file was local
+                path = "files/original/" + file.getKey();
+            } else {
+                path = "files/replication/" + file.getKey();
+            }
+            sender.send(newOwner, path);
         }
         catch (RemoteException | NotBoundException e) {
             e.printStackTrace();
         }
+    }
+
+    private String getNewOwner(String filename) throws RemoteException, NotBoundException{
+            Registry registry = LocateRegistry.getRegistry();
+            NamingServerInt nameServer = (NamingServerInt) registry.lookup("NamingServer");
+            return nameServer.getPrevious(failedIP).getIp();
     }
 
     private void removeFromNameserver() {

@@ -1,4 +1,4 @@
-package be.dist.node.agents;
+package be.dist.common;
 
 import java.io.Serializable;
 

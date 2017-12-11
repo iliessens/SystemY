@@ -3,7 +3,7 @@ package be.dist.node.discovery;
 import be.dist.common.NamingServerInt;
 import be.dist.common.Node;
 import be.dist.node.NodeSetup;
-import be.dist.node.agents.Agent;
+import be.dist.common.Agent;
 import be.dist.node.agents.FailureAgent;
 import be.dist.node.agents.LocalIP;
 

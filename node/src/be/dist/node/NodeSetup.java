@@ -4,7 +4,7 @@ import be.dist.common.NameHasher;
 import be.dist.common.NamingServerInt;
 import be.dist.common.Node;
 import be.dist.common.NodeRMIInt;
-import be.dist.node.agents.Agent;
+import be.dist.common.Agent;
 import be.dist.node.agents.FileListAgent;
 import be.dist.node.discovery.FailureHandler;
 import be.dist.node.replication.FileDiscovery;
