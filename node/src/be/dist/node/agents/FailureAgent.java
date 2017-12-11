@@ -56,6 +56,9 @@ public class FailureAgent implements Agent {
                 }
                 sender.send(newOwner, path);
             }
+            else {
+                // TODO update remote bestandsfiche
+            }
         }
         catch (RemoteException | NotBoundException e) {
             e.printStackTrace();

@@ -27,4 +27,13 @@ public class LocalFileList {
             System.err.println("File not (yet) known in the network can't lock.");
         }
     }
+
+    public static boolean isLocked(String filename) {
+        if (fileMap.containsKey(filename)) {
+            return fileMap.get(filename).getLockedBy() != null;
+        }
+        else {
+            return false;
+        }
+    }
 }
