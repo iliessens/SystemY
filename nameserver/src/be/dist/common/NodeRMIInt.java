@@ -1,7 +1,5 @@
 package be.dist.common;
 
-import be.dist.node.agents.Agent;
-
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
