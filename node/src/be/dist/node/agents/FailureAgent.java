@@ -3,6 +3,7 @@ package be.dist.node.agents;
 import be.dist.common.Agent;
 import be.dist.common.NamingServerInt;
 import be.dist.common.NodeRMIInt;
+import be.dist.node.NodeSetup;
 import be.dist.node.replication.FileDiscovery;
 import be.dist.node.replication.NodeFileInformation;
 import be.dist.node.replication.TCPSender;
@@ -45,7 +46,11 @@ public class FailureAgent implements Agent {
     private void failedFileHandler(Map.Entry<String,NodeFileInformation> file) {
         try {
             String newOwner = getNewOwner(file.getKey());
-            if (! remoteHasFile(newOwner, file.getKey())) { // only replicate if not already there
+
+            Registry registry = LocateRegistry.getRegistry(newOwner);
+            NodeRMIInt remoteNode = (NodeSetup) registry.lookup("nodeSetup");
+
+            if (! remoteNode.hasFile(file.getKey())) { // only replicate if not already there
 
                 TCPSender sender = new TCPSender(7899);
                 String path;
@@ -57,18 +62,13 @@ public class FailureAgent implements Agent {
                 sender.send(newOwner, path);
             }
             else {
-                // TODO update remote bestandsfiche
+                //TODO bestandsfiche op nieuwe eigenaar updaten
+                // heeft enkel nut wanneer we ook downloads gebruiken om de replicatie te herstellen
             }
         }
         catch (RemoteException | NotBoundException e) {
             e.printStackTrace();
         }
-    }
-
-    private boolean remoteHasFile(String remoteIp, String filename) throws RemoteException, NotBoundException{
-        Registry registry = LocateRegistry.getRegistry(remoteIp);
-        NodeRMIInt remoteNode = (NodeRMIInt) registry.lookup("nodeSetup");
-        return remoteNode.hasFile(filename);
     }
 
     private String getNewOwner(String filename) throws RemoteException, NotBoundException{
