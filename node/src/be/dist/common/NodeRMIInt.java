@@ -10,4 +10,5 @@ public interface NodeRMIInt extends Remote {
     void setNeighbours(Node previous, Node next) throws RemoteException;
     boolean isAlive() throws RemoteException;
     void runAgent(Agent agentToRun) throws RemoteException;
+    boolean hasFile(String filename) throws RemoteException;
 }

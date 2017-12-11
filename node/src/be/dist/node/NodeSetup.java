@@ -249,4 +249,8 @@ public class NodeSetup  implements NodeRMIInt{
         }
     }
 
+    public boolean hasFile(String filename) {
+        return FileDiscovery.getInstance().getFileList().containsKey(filename);
+    }
+
 }
