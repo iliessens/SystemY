@@ -8,6 +8,13 @@ public class FileIO {
 
     private Map<String,NodeFileInformation> informationMap;
 
+    private HashMap<String,Bestandsfiche> bestandsfiches;
+
+    public FileIO()
+    {
+        bestandsfiches = new HashMap<String,Bestandsfiche>();
+    }
+
     public List<String> getLocalFiles() {
 //        try (Stream<Path> paths = Files.walk(Paths.get("files/original/"))) {
 //           return paths
@@ -19,9 +26,9 @@ public class FileIO {
             final File folder = new File("files/original");
             if (folder.listFiles() != null) {
                 for (final File fileEntry : folder.listFiles()) {
-                    if (!fileEntry.isDirectory()) {
+                    if ((!fileEntry.isDirectory())&&(!fileEntry.isHidden())) { // check if directory or hidden
                         files.add(fileEntry.getName());
-                        System.out.println("File discovered: "+fileEntry.getName());
+                        //System.out.println("File discovered: "+fileEntry.getName());
                     }
                 }
             }
@@ -38,9 +45,16 @@ public class FileIO {
         return informationMap;
     }
 
-    public Map<String,NodeFileInformation> getLogFiles() {
-        Map logFiles = new HashMap<String,LogFiles>();
-        return logFiles;
+    public Map<String,Bestandsfiche> getBestandsfiches() {
+        return bestandsfiches;
+    }
+
+    public void newBestandsfiche(String filename, String localip, String replicatieip){
+        Bestandsfiche bestandsfiche = new Bestandsfiche(localip, replicatieip);
+    }
+
+    public void recieveBestandsfiche(Bestandsfiche bestandsfiche, String filename){
+        getBestandsfiches().put(filename, bestandsfiche);
     }
 
 }

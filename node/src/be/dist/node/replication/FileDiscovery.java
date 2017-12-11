@@ -1,6 +1,7 @@
 package be.dist.node.replication;
 
 import be.dist.common.NamingServerInt;
+import be.dist.node.NodeSetup;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -67,10 +68,15 @@ public class FileDiscovery {
                 sender.send(fileDuplicateIP, filePath);
                 fileInfo.setLocal(true);
                 fileInfo.setOwner(true);
+                io.newBestandsfiche(fileName, myIP, fileDuplicateIP);
             } else {
                 sender.send(fileOwnerIP, filePath);
                 fileInfo.setLocal(true);
                 fileInfo.setOwner(false);
+                io.newBestandsfiche(fileName, myIP, fileOwnerIP);
+                //TODO
+                //roep de functie in NodeSetup aan
+                io.getBestandsfiches().remove(fileName);
             }
         }
         catch (RemoteException e) {
@@ -144,6 +150,10 @@ public class FileDiscovery {
             if (entry.getValue().getLocal()) {
                 if (entry.getValue().getOwner()){
                     //send remove file to the duplicate
+                    //String ipDuplicate = entry.getValue().getDownloadLocaties();
+
+
+
                 }
                 else{
                     //send shutdown to owner. if no downloads then remove file on owner side. else update logFile
@@ -168,5 +178,9 @@ public class FileDiscovery {
                 }
             }
         }
+    }
+
+    public FileIO getIO(){
+        return io;
     }
 }

@@ -7,6 +7,7 @@ import be.dist.common.NodeRMIInt;
 import be.dist.common.Agent;
 import be.dist.node.agents.FileListAgent;
 import be.dist.node.discovery.FailureHandler;
+import be.dist.node.replication.Bestandsfiche;
 import be.dist.node.replication.FileDiscovery;
 import be.dist.node.replication.NewFilesChecker;
 
@@ -22,6 +23,7 @@ public class NodeSetup  implements NodeRMIInt{
     private volatile Node next;
     private String name;
     private String ownIp;
+    private FileDiscovery fileDiscovery;
 
     private Node selfNode;
     private volatile boolean setupDone = false;
@@ -51,7 +53,7 @@ public class NodeSetup  implements NodeRMIInt{
         this.numberOfNodes = numberOfNodes;
         nameIP = nameserverIP;
 
-        new FileDiscovery(nameIP, ownIp, name);
+        fileDiscovery = new FileDiscovery(nameIP, ownIp, name);
 
 
         FailureHandler.connect(nameIP);
@@ -129,8 +131,8 @@ public class NodeSetup  implements NodeRMIInt{
                 // Doorgeven naar nieuwe node
                 sendNeighbours(ip);
 
-                // TODO send files to new node
-                //discovery.filecheckNewNode(ip);
+                // send files to new node
+                FileDiscovery.getInstance().fileCheckNewNode(ip);
             }
             if ((previous.getHash() < newNodeHash) && (ownHash > newNodeHash)) {
                 // Deze node is de volgende van de nieuwe node --> De nieuwe is de vorige
@@ -251,6 +253,12 @@ public class NodeSetup  implements NodeRMIInt{
 
     public boolean hasFile(String filename) {
         return FileDiscovery.getInstance().getFileList().containsKey(filename);
+    }
+
+    public void SendBestandsFiche(Bestandsfiche bestandsfiche, String filename){
+        fileDiscovery.getIO().recieveBestandsfiche(bestandsfiche, filename);
+        //TODO
+        //Zet dit als rmi
     }
 
 }
