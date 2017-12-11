@@ -66,20 +66,20 @@ public class FailureAgent implements Agent {
     }
 
     private boolean remoteHasFile(String remoteIp, String filename) throws RemoteException, NotBoundException{
-        Registry registry = LocateRegistry.getRegistry();
+        Registry registry = LocateRegistry.getRegistry(remoteIp);
         NodeRMIInt remoteNode = (NodeRMIInt) registry.lookup("nodeSetup");
         return remoteNode.hasFile(filename);
     }
 
     private String getNewOwner(String filename) throws RemoteException, NotBoundException{
-            Registry registry = LocateRegistry.getRegistry();
+            Registry registry = LocateRegistry.getRegistry(LocalIP.getNameServerIP());
             NamingServerInt nameServer = (NamingServerInt) registry.lookup("NamingServer");
             return nameServer.getPrevious(failedIP).getIp();
     }
 
     private void removeFromNameserver() {
         try {
-                Registry registry = LocateRegistry.getRegistry();
+                Registry registry = LocateRegistry.getRegistry(LocalIP.getNameServerIP());
             NamingServerInt nameServer = (NamingServerInt) registry.lookup("NamingServer");
             nameServer.removeNodeByIp(failedIP);
         }
@@ -90,7 +90,7 @@ public class FailureAgent implements Agent {
 
     private String getOwnerIP(String filename) {
         try {
-            Registry registry = LocateRegistry.getRegistry();
+            Registry registry = LocateRegistry.getRegistry(LocalIP.getNameServerIP());
             NamingServerInt nameServer = (NamingServerInt) registry.lookup("NamingServer");
             return nameServer.getOwner(filename);
         }

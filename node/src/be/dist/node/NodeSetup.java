@@ -6,6 +6,7 @@ import be.dist.common.Node;
 import be.dist.common.NodeRMIInt;
 import be.dist.common.Agent;
 import be.dist.node.agents.FileListAgent;
+import be.dist.node.agents.LocalIP;
 import be.dist.node.discovery.FailureHandler;
 import be.dist.node.replication.Bestandsfiche;
 import be.dist.node.replication.FileDiscovery;
@@ -52,6 +53,7 @@ public class NodeSetup  implements NodeRMIInt{
 
         this.numberOfNodes = numberOfNodes;
         nameIP = nameserverIP;
+        LocalIP.setNameServerIP(nameIP); // save to static field for everyone
 
         fileDiscovery = new FileDiscovery(nameIP, ownIp, name);
 
