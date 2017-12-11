@@ -5,6 +5,7 @@ import be.dist.node.NodeSetup;
 import be.dist.node.discovery.FailureHandler;
 import be.dist.node.replication.FileDiscovery;
 import be.dist.node.replication.NodeFileInformation;
+import be.dist.node.replication.TCPSender;
 
 import java.io.Serializable;
 import java.rmi.NotBoundException;
@@ -32,8 +33,8 @@ public class FailureAgent implements Agent {
 
         localFiles.entrySet().stream()
                 .filter(x -> x.getValue().getLocal()) // only keep local files
-                .filter(x -> getOwnerIP(x.getKey()).equals(failedIP))
-                .forEach(x -> failedFileHandler(x.getKey()));
+                .filter(x -> getOwnerIP(x.getKey()).equals(failedIP)) // keep files that were on the failed node
+                .forEach(x -> failedFileHandler(x));
 
         if(startIP.equals(LocalIP.getLocalIP())) {
             // done, stop circulating and remove from nameserver
@@ -42,8 +43,28 @@ public class FailureAgent implements Agent {
         }
     }
 
-    private void failedFileHandler(String filename) {
-        // TODO do something
+    private void failedFileHandler(Map.Entry<String,NodeFileInformation> file) {
+        String newOwner  = getNewOwner(file.getKey());
+        TCPSender sender = new TCPSender(7899);
+        String path;
+        if(file.getValue().getLocal()) { // file was local
+            path = "files/original/" + file.getKey();
+        }
+        else {
+            path = "files/replication/" + file.getKey();
+        }
+        sender.send(newOwner, path);
+    }
+
+    private String getNewOwner(String filename) {
+        try {
+            Registry registry = LocateRegistry.getRegistry();
+            NamingServerInt nameServer = (NamingServerInt) registry.lookup("NamingServer");
+            nameServer.getPrevious(failedIP);
+        }
+        catch (RemoteException | NotBoundException e) {
+            e.printStackTrace();
+        }
     }
 
     private void removeFromNameserver() {
