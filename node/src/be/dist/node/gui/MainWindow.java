@@ -1,10 +1,13 @@
 package be.dist.node.gui;
 
+import be.dist.node.agents.LocalFileList;
+
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Set;
 
 public class MainWindow {
     private JPanel panel1;
@@ -27,6 +30,8 @@ public class MainWindow {
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
             e.printStackTrace();
         }
+
+        LocalFileList.addObserver(this::setFileList);
 
         addButtonlisteners();
         selectedFilename = null;
@@ -69,6 +74,10 @@ public class MainWindow {
                 // TODO do local delete
             }
         });
+    }
+
+    private void setFileList(Set<String> filenames) {
+        //TODO set file list
     }
 
     public void openGUI() {
