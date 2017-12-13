@@ -62,11 +62,12 @@ public class FailureAgent implements Agent {
                 } else {
                     path = "files/replication/" + file.getKey();
                 }
+                // send the file to its new owner
                 sender.send(newOwner, path);
 
-                // FIXME maakt de volgorde van bestand en fiche uit?
+                // send the logfile to the new owner
                 Bestandsfiche fiche = new Bestandsfiche(LocalIP.getLocalIP(),newOwner);
-                //remoteNode.receiveBestandsFiche(file.getKey(),fiche);
+                remoteNode.receiveBestandsFiche(fiche,file.getKey());
             }
             else {
                 //bestandsfiche op nieuwe eigenaar updaten
