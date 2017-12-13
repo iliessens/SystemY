@@ -6,7 +6,7 @@ import java.util.function.Consumer;
 public class LocalFileList {
 
     private static Map<String,AgentFile> fileMap;
-    private static Set<Consumer<Set<String>>> observers = new HashSet<>();
+    private static Set<Consumer<Map<String,AgentFile>>> observers = new HashSet<>();
 
     public LocalFileList() {
         fileMap = new HashMap<>();
@@ -19,10 +19,10 @@ public class LocalFileList {
     public static void setFileMap(Map<String, AgentFile> fileMap) {
         LocalFileList.fileMap = fileMap;
         // map changed, notify observers
-        observers.forEach(x -> x.accept(fileMap.keySet()));
+        observers.forEach(x -> x.accept(fileMap));
     }
 
-    public static void addObserver(Consumer<Set<String>> consumer) {
+    public static void addObserver(Consumer<Map<String,AgentFile>> consumer) {
         observers.add(consumer);
     }
 

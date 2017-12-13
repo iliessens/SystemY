@@ -1,22 +1,25 @@
 package be.dist.node.gui;
 
+import be.dist.node.agents.AgentFile;
 import be.dist.node.agents.LocalFileList;
+import be.dist.node.agents.LocalIP;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Set;
+import java.util.Map;
 
 public class MainWindow {
     private JPanel panel1;
-    private JList list1;
+    private JList fileList;
     private JButton deleteButton;
     private JButton deleteLocalButton;
     private JButton downloadButton;
 
-    private String selectedFilename;
+    private AgentFile selectedFile;
+    private Map<String,AgentFile> fileMap;
 
     public static void main(String args[]) {
         MainWindow gui = new MainWindow();
@@ -34,20 +37,27 @@ public class MainWindow {
         LocalFileList.addObserver(this::setFileList);
 
         addButtonlisteners();
-        selectedFilename = null;
+        selectedFile = null;
 
-        list1.addListSelectionListener(new ListSelectionListener() {
+        fileList.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent listSelectionEvent) {
                 // might be run multiple times
                 int i = listSelectionEvent.getFirstIndex();
                 JList lsm = (JList) listSelectionEvent.getSource();
-                selectedFilename = (String) lsm.getModel().getElementAt(i);
+                String selectedFilename = (String) lsm.getModel().getElementAt(i);
 
                 if(selectedFilename != null) {
                     deleteButton.setEnabled(true);
-                    //deleteLocalButton.setEnabled(true);
                     downloadButton.setEnabled(true);
+
+                    selectedFile = fileMap.get(selectedFilename);
+                    if (selectedFile != null) {
+                        if (selectedFile.getOwnerIP().equals(LocalIP.getLocalIP())) {
+                            // only allow delete local when local is owner
+                            deleteLocalButton.setEnabled(true);
+                        }
+                    }
                 }
             }
         });
@@ -58,6 +68,7 @@ public class MainWindow {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 // TODO do download action
+                //selectedFile.getOwnerIP();
             }
         });
 
@@ -76,8 +87,11 @@ public class MainWindow {
         });
     }
 
-    private void setFileList(Set<String> filenames) {
-        //TODO set file list
+    private void setFileList(Map<String,AgentFile> filenames) {
+        fileMap = filenames;
+        DefaultListModel<String> model = new DefaultListModel<>();
+        // Fill list with items
+        filenames.forEach((key, value) -> model.addElement(key));
     }
 
     public void openGUI() {

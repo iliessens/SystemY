@@ -29,15 +29,14 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="59797" class="javax.swing.JList" binding="list1" default-binding="true">
+          <component id="59797" class="javax.swing.JList" binding="fileList">
             <constraints>
               <splitpane position="right"/>
             </constraints>
             <properties>
               <dropMode value="ON"/>
               <model>
-                <item value="Test"/>
-                <item value="Test2"/>
+                <item value="Please wait..."/>
               </model>
               <selectionMode value="0"/>
             </properties>
