@@ -51,7 +51,7 @@ public class NodeSetup  implements NodeRMIInt{
         this.numberOfNodes = numberOfNodes;
         this.nameIP = nameserverIP;
 
-        fileDiscovery = new FileDiscovery(nameIP, ownIp, name);
+        fileDiscovery = new FileDiscovery(nameIP, ownIp, name, this);
 
 
         FailureHandler.connect(nameIP);
@@ -220,10 +220,19 @@ public class NodeSetup  implements NodeRMIInt{
         }
     }
 
-    public void SendBestandsFiche(Bestandsfiche bestandsfiche, String filename){
+    public void sendBestandsFiche(Bestandsfiche bestandsfiche, String filename, String ip){
+        NodeRMIInt sendBestandsficheToRemote = null;
+        try {
+            Registry registry = LocateRegistry.getRegistry(ip);
+            sendBestandsficheToRemote = (NodeRMIInt) registry.lookup("nodeSetup");
+            sendBestandsficheToRemote.receiveBestandsFiche(bestandsfiche, filename);
+        } catch (RemoteException | NotBoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void receiveBestandsFiche(Bestandsfiche bestandsfiche, String filename) {
         fileDiscovery.getIO().recieveBestandsfiche(bestandsfiche, filename);
-        //TODO
-        //Zet dit als rmi
     }
 
 

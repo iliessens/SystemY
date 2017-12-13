@@ -1,8 +1,9 @@
 package be.dist.node.replication;
 
+import java.io.Serializable;
 import java.util.TreeSet;
 
-public class Bestandsfiche {
+public class Bestandsfiche implements Serializable {
 
     private String lokaalIP;
     private TreeSet downloadLocaties;

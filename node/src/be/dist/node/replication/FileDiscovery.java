@@ -17,11 +17,13 @@ public class FileDiscovery {
     private String myName;
     private FileIO io;
     private TCPSender sender;
+    private NodeSetup nodeSetup;
 
-    public FileDiscovery(String ServerIP, String ip, String name){
+    public FileDiscovery(String ServerIP, String ip, String name, NodeSetup setup){
         System.out.println("Filediscovery entered...");
         myIP = ip;
         myName = name;
+        nodeSetup = setup;
         io =  new FileIO();
         try {
             Registry registry = LocateRegistry.getRegistry(ServerIP);
@@ -71,8 +73,7 @@ public class FileDiscovery {
                 fileInfo.setLocal(true);
                 fileInfo.setOwner(false);
                 io.newBestandsfiche(fileName, myIP, fileOwnerIP);
-                //TODO
-                //roep de functie in NodeSetup aan
+                nodeSetup.sendBestandsFiche(io.getBestandsfiches().get(fileName), fileName, fileOwnerIP);
                 io.getBestandsfiches().remove(fileName);
             }
         }
