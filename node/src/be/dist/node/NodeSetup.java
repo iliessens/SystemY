@@ -121,8 +121,8 @@ public class NodeSetup  implements NodeRMIInt{
                 // Doorgeven naar nieuwe node
                 sendNeighbours(ip);
 
-                // TODO send files to new node
-                //discovery.filecheckNewNode(ip);
+                // send files to new node
+                FileDiscovery.getInstance().fileCheckNewNode(ip);
             }
             if ((previous.getHash() < newNodeHash) && (ownHash > newNodeHash)) {
                 // Deze node is de volgende van de nieuwe node --> De nieuwe is de vorige
