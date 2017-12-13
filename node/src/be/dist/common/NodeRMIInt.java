@@ -1,5 +1,7 @@
 package be.dist.common;
 
+import be.dist.node.replication.Bestandsfiche;
+
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
@@ -9,4 +11,5 @@ public interface NodeRMIInt extends Remote {
     boolean isAlive() throws RemoteException;
     void runAgent(Agent agentToRun) throws RemoteException;
     boolean hasFile(String filename) throws RemoteException;
+    void receiveBestandsFiche(Bestandsfiche bestandsfiche, String filename) throws RemoteException;
 }
