@@ -1,5 +1,6 @@
 package be.dist.node.replication;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -16,6 +17,8 @@ public class TCPListener extends Thread {
     public TCPListener(int port, String filePath) {
         this.port = port;
         this.filePath = filePath;
+        File folder = new File(filePath);
+        folder.mkdirs();
     }
 
     @Override
