@@ -41,6 +41,10 @@ public class Main {
         // After setup
         MulticastListener listener = new MulticastListener(ip,setup);
         listener.start();
+
+        // download listener
+        new TCPListener(7900,"files/downloads/").run();
+
         System.out.println("Multicast listener enabled...");
         System.out.println("Node staat volledig aan.");
 
