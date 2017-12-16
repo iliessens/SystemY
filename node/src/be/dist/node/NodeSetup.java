@@ -260,9 +260,12 @@ public class NodeSetup  implements NodeRMIInt{
 
     @Override
     public void sendFileTo(String receiverIp, String filename) throws RemoteException {
-       TCPSender sender = new TCPSender(7900);
-       // Only replicated files are used for downloads
-       sender.send(receiverIp,"files/replication/"+filename);
+        // run in separate thread to prevent hang of the RMI call
+       new Thread(() -> {
+           TCPSender sender = new TCPSender(7900);
+           // Only replicated files are used for downloads
+           sender.send(receiverIp,"files/replication/"+filename);
+       }).start();
     }
 
     public void sendBestandsFiche(Bestandsfiche bestandsfiche, String filename, String ip){
