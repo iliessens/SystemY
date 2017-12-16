@@ -10,10 +10,12 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.List;
 import java.util.Map;
 
 public class MainWindow {
@@ -52,19 +54,17 @@ public class MainWindow {
                 JList lsm = (JList) listSelectionEvent.getSource();
                 String selectedFilename = (String) lsm.getModel().getElementAt(i);
 
-                if(selectedFilename != null) {
                     deleteButton.setEnabled(true);
                     downloadButton.setEnabled(true);
 
                     selectedFile = fileMap.get(selectedFilename);
                     if (selectedFile != null) {
-                        if (selectedFile.getOwnerIP().equals(LocalIP.getLocalIP())) {
-                            // only allow delete local when local is owner
+                        if(new File("files/downloads/"+selectedFile.getFileName()).exists()) {
+                            // file is present in downloads folder
                             deleteLocalButton.setEnabled(true);
                         }
                     }
                 }
-            }
         });
     }
 
@@ -91,7 +91,7 @@ public class MainWindow {
         deleteLocalButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                // TODO do local delete
+                new File("files/downloads/"+selectedFile.getFileName()).delete();
             }
         });
     }
@@ -101,6 +101,10 @@ public class MainWindow {
         DefaultListModel<String> model = new DefaultListModel<>();
         // Fill list with items
         filenames.forEach((key, value) -> model.addElement(key));
+
+        fileList.setModel(model);
+        // enable list
+        fileList.setEnabled(true);
     }
 
     public void openGUI() {
