@@ -11,6 +11,7 @@ import be.dist.node.discovery.FailureHandler;
 import be.dist.node.replication.Bestandsfiche;
 import be.dist.node.replication.FileDiscovery;
 import be.dist.node.replication.NewFilesChecker;
+import be.dist.node.replication.TCPSender;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -255,6 +256,13 @@ public class NodeSetup  implements NodeRMIInt{
 
     public boolean hasFile(String filename) {
         return FileDiscovery.getInstance().getFileList().containsKey(filename);
+    }
+
+    @Override
+    public void sendFileTo(String receiverIp, String filename) throws RemoteException {
+       TCPSender sender = new TCPSender(7900);
+       // Only replicated files are used for downloads
+       sender.send(receiverIp,"files/replication/"+filename);
     }
 
     public void SendBestandsFiche(Bestandsfiche bestandsfiche, String filename){

@@ -9,4 +9,5 @@ public interface NodeRMIInt extends Remote {
     boolean isAlive() throws RemoteException;
     void runAgent(Agent agentToRun) throws RemoteException;
     boolean hasFile(String filename) throws RemoteException;
+    void sendFileTo(String receiverIp, String filename) throws RemoteException;
 }
