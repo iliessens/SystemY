@@ -7,7 +7,7 @@ public class FileInformation {
     private String fileName;
 
     public FileInformation(Boolean isLocal, Boolean isOwner, String fileName) {
-        this.isLocal = isLocal;
+        this.isLocal = isLocal; // heeft originele
         this.isOwner = isOwner;
         this.fileName = fileName;
     }
