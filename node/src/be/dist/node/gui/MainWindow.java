@@ -103,6 +103,7 @@ public class MainWindow {
         fileList.setModel(model);
         // enable list
         fileList.setEnabled(true);
+        downloader.update();
     }
 
     public void openGUI() {
