@@ -219,17 +219,7 @@ public class NodeSetup  implements NodeRMIInt{
             setupDone = true;
         }
     }
-
-    public void sendBestandsFiche(Bestandsfiche bestandsfiche, String filename, String ip){
-        NodeRMIInt sendBestandsficheToRemote = null;
-        try {
-            Registry registry = LocateRegistry.getRegistry(ip);
-            sendBestandsficheToRemote = (NodeRMIInt) registry.lookup("nodeSetup");
-            sendBestandsficheToRemote.receiveBestandsFiche(bestandsfiche, filename);
-        } catch (RemoteException | NotBoundException e) {
-            e.printStackTrace();
-        }
-    }
+    
 
     public void receiveBestandsFiche(Bestandsfiche bestandsfiche, String filename) {
         fileDiscovery.getIO().recieveBestandsfiche(bestandsfiche, filename);

@@ -1,6 +1,7 @@
 package be.dist.node.replication;
 
 import be.dist.common.NamingServerInt;
+import be.dist.common.NodeRMIInt;
 import be.dist.node.NodeSetup;
 
 import java.rmi.NotBoundException;
@@ -73,7 +74,7 @@ public class FileDiscovery {
                 fileInfo.setLocal(true);
                 fileInfo.setOwner(false);
                 io.newBestandsfiche(fileName, myIP, fileOwnerIP);
-                nodeSetup.sendBestandsFiche(io.getBestandsfiches().get(fileName), fileName, fileOwnerIP);
+                sendBestandsFiche(io.getBestandsfiches().get(fileName), fileName, fileOwnerIP);
                 io.getBestandsfiches().remove(fileName);
             }
         }
@@ -180,5 +181,16 @@ public class FileDiscovery {
 
     public FileIO getIO(){
         return io;
+    }
+
+    private void sendBestandsFiche(Bestandsfiche bestandsfiche, String filename, String ip){
+        NodeRMIInt sendBestandsficheToRemote = null;
+        try {
+            Registry registry = LocateRegistry.getRegistry(ip);
+            sendBestandsficheToRemote = (NodeRMIInt) registry.lookup("nodeSetup");
+            sendBestandsficheToRemote.receiveBestandsFiche(bestandsfiche, filename);
+        } catch (RemoteException | NotBoundException e) {
+            e.printStackTrace();
+        }
     }
 }
