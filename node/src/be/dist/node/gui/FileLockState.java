@@ -1,8 +1,9 @@
 package be.dist.node.gui;
 
 public enum FileLockState {
-    // Locked by peer
-    // Lock request has been set
-    // Lock by self
-    // Unlocked (should not be necessary)
+    WAITFORRELEASE, // Locked by peer
+    WAITFORLOCK, // Lock request has been set
+    LOCKED, // Lock by self
+    UNLOCKED // Unlocked (should not be necessary)
+
 }
