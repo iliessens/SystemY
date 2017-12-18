@@ -27,6 +27,7 @@ public class MainWindow {
 
     private AgentFile selectedFile;
     private Map<String,AgentFile> fileMap;
+    private FileDownloader downloader;
 
     public static void main(String args[]) {
         MainWindow gui = new MainWindow();
@@ -40,6 +41,8 @@ public class MainWindow {
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
             e.printStackTrace();
         }
+
+        downloader = new FileDownloader();
 
         LocalFileList.addObserver(this::setFileList);
 
@@ -72,12 +75,7 @@ public class MainWindow {
         downloadButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                NodeRMIInt nodeRMIInt = getRemoteSetup(selectedFile.getOwnerIP());
-                try {
-                    nodeRMIInt.sendFileTo(LocalIP.getLocalIP(),selectedFile.getFileName());
-                } catch (RemoteException e) {
-                    e.printStackTrace();
-                }
+                downloader.downloadFile(selectedFile);
             }
         });
 
@@ -115,14 +113,4 @@ public class MainWindow {
         frame.setVisible(true);
     }
 
-    private NodeRMIInt getRemoteSetup(String ip) {
-        NodeRMIInt remoteSetup = null;
-        try {
-            Registry registry = LocateRegistry.getRegistry(ip);
-            remoteSetup = (NodeRMIInt) registry.lookup("nodeSetup");
-        } catch (RemoteException | NotBoundException e) {
-            e.printStackTrace();
-        }
-        return remoteSetup;
-    }
 }
