@@ -6,7 +6,7 @@ Jannes Van Goeye
 Robbe Pauwels  
 Imre Liessens  
 
-##How to run the project  
+## How to run the project  
 This manual will guide you through the setup for running the project in the IntelliJ IDE. Running form CLI is possible and very similar.  
 
 1. Open IntelliJ  
