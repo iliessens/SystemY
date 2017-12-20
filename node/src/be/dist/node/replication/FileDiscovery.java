@@ -216,30 +216,42 @@ public class FileDiscovery {
             String filePath = "files/replication/"+fileName;
             String IPPrevious = nodeSetup.getPrevious().getIp(); // IP van vorige node
             Map<String, Bestandsfiche> fiches = io.getBestandsfiches();
-            System.out.println("Robbe check : " + fileName);
-            String IPOfLocal = fiches.get(fileName).getLocalIP(); // IP van lokale versie -- gevraagd via eigenaar's bestandsfiche
+            System.out.println("Robbe check : " + fileName + "file info: " + entry.getValue().getOwner());
 
-            /* Wanneer een bestand dat bij deze node gerepliceerd is, lokaal aanwezig is bij zijn vorige node,
-            moet het naar de vorige node van zijn vorige node verplaatst worden */
-            if (IPOfLocal.equals(IPPrevious)) {
-                NodeRMIInt previous = NodeSetup.getRemoteSetup(IPPrevious);
-                String previousOfPreviousIP = previous.getPrevious().getIp();
-                sender.send(previousOfPreviousIP, filePath);
-                Bestandsfiche temp = fiches.get(fileName);
-                temp.setReplicatieLocatie(previousOfPreviousIP);
-                sendBestandsFiche(temp, fileName, previousOfPreviousIP);
+
+
+            if (fiches.containsKey(fileName)) {
+                String IPOfLocal = fiches.get(fileName).getLocalIP(); // IP van lokale versie -- gevraagd via eigenaar's bestandsfiche
+
+                /* Wanneer een bestand dat bij deze node gerepliceerd is, lokaal aanwezig is bij zijn vorige node,
+                moet het naar de vorige node van zijn vorige node verplaatst worden */
+                if (IPOfLocal.equals(IPPrevious)) {
+                    NodeRMIInt previous = NodeSetup.getRemoteSetup(IPPrevious);
+                    String previousOfPreviousIP = previous.getPrevious().getIp();
+                    sender.send(previousOfPreviousIP, filePath);
+                    Bestandsfiche temp = fiches.get(fileName);
+                    temp.setReplicatieLocatie(previousOfPreviousIP);
+                    sendBestandsFiche(temp, fileName, previousOfPreviousIP);
+                }
+
+                /* Wanneer een node wordt afgesloten, moeten de bestanden die bij deze node gerepliceerd staan,
+                verplaatst worden naar zijn vorige node, deze node wordt de nieuwe eigenaar. */
+                else {
+                    sender.send(IPPrevious, filePath);
+                    Bestandsfiche temp = fiches.get(fileName);
+                    temp.setReplicatieLocatie(IPPrevious);
+                    sendBestandsFiche(temp, fileName, IPPrevious);
+                }
+
+                nodeSetup.deleteReplica(fileName);
             }
 
-            /* Wanneer een node wordt afgesloten, moeten de bestanden die bij deze node gerepliceerd staan,
-            verplaatst worden naar zijn vorige node, deze node wordt de nieuwe eigenaar. */
+            /* In het geval dat de node een replicatie bevat waarvan hij toch GEEN owner is */
             else {
-                sender.send(IPPrevious, filePath);
-                Bestandsfiche temp = fiches.get(fileName);
-                temp.setReplicatieLocatie(IPPrevious);
-                sendBestandsFiche(temp, fileName, IPPrevious);
+                String ownerIP = remoteSetup.getOwner(fileName);
+                NodeRMIInt owner = NodeSetup.getRemoteSetup(ownerIP);
+                owner.shutdownHandlerAlsDezeNodeOwnerIPVDegeneDieDitOproeptViaRMI(fileName);
             }
-
-            nodeSetup.deleteReplica(fileName);
         }
     }
 
@@ -267,5 +279,9 @@ public class FileDiscovery {
         } catch (RemoteException | NotBoundException e) {
             e.printStackTrace();
         }
+    }
+
+    public void send(String IP, String filePath) {
+        sender.send(IP, filePath);
     }
 }

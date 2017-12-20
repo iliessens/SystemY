@@ -13,4 +13,5 @@ public interface NodeRMIInt extends Remote {
     void deleteReplica(String path) throws RemoteException;
     Node getPrevious() throws RemoteException;
     void shutdownHandlerOwner(String fileName) throws RemoteException;
-}
+    void shutdownHandlerAlsDezeNodeOwnerIPVDegeneDieDitOproeptViaRMI(String fileName);
+    }
