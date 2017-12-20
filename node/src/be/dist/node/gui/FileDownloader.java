@@ -10,6 +10,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 public class FileDownloader {
@@ -32,7 +33,10 @@ public class FileDownloader {
     }
 
     public void update() {
-        for(Map.Entry<AgentFile,FileLockState> currentFile : downloadRequests.entrySet()) {
+        Iterator<Map.Entry<AgentFile,FileLockState> > it = downloadRequests.entrySet().iterator();
+
+        while(it.hasNext()) {
+            Map.Entry<AgentFile,FileLockState> currentFile = it.next();
             AgentFile fileObject = currentFile.getKey();
             switch (currentFile.getValue()) {
                 case WAITFORRELEASE: if(!fileObject.isLocked()) {
@@ -55,7 +59,7 @@ public class FileDownloader {
 
                 // we are done, remove from map
                 // Lock should be removed by now
-                case UNLOCKED: downloadRequests.remove(fileObject); // FIXME remove in loop?
+                case UNLOCKED: it.remove();
 
             }
         }
