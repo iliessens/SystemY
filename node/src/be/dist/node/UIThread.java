@@ -1,7 +1,9 @@
 package be.dist.node;
 
 import be.dist.common.Node;
+import be.dist.node.replication.FileDiscovery;
 
+import java.rmi.RemoteException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -45,6 +47,11 @@ public class UIThread extends Thread {
 
     public void shutdown() {
         setup.sendNeighboursShutdown();
+        try {
+            FileDiscovery.getInstance().fileCheckShutdownNodev2();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
         System.exit(0);
     }
 
