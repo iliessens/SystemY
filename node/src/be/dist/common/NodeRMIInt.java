@@ -10,7 +10,7 @@ public interface NodeRMIInt extends Remote {
     void setNeighbours(Node previous, Node next) throws RemoteException;
     boolean isAlive() throws RemoteException;
     void receiveBestandsFiche(Bestandsfiche bestandsfiche, String filename) throws RemoteException;
-    void deleteReplica(String sdfd) throws RemoteException;
-    Node getPrevious();
-    void shutdownHandlerOwner(String fileName);
+    void deleteReplica(String path) throws RemoteException;
+    Node getPrevious() throws RemoteException;
+    void shutdownHandlerOwner(String fileName) throws RemoteException;
 }

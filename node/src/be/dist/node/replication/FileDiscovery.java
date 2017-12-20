@@ -209,7 +209,7 @@ public class FileDiscovery {
         }
     }
 
-    public void regelReplicaties(HashMap<String, FileInformation> reps) {
+    public void regelReplicaties(HashMap<String, FileInformation> reps) throws RemoteException {
         for(Map.Entry<String,FileInformation> entry : reps.entrySet()) {
             String fileName = entry.getKey();
             String filePath = "files/replication/"+fileName;
