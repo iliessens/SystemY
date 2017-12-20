@@ -6,6 +6,8 @@ import be.dist.node.discovery.MulticastSender;
 import be.dist.node.discovery.NodeRMIServer;
 import be.dist.node.replication.TCPListener;
 
+import java.util.UUID;
+
 public class Main {
 
     public static void main(String[] args) throws Exception{
@@ -14,7 +16,7 @@ public class Main {
         if(args.length < 2) {
             //ip= "10.2.1.10";
             ip= "127.0.0.1";
-            name = "Imre";
+            name = UUID.randomUUID().toString();
 
             System.out.println("No command line parameters: using defaults");
         }

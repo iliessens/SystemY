@@ -5,12 +5,14 @@ import java.net.*;
 import java.util.Arrays;
 
 public class Connection extends Thread {
-    Socket connection;
-    String fileName;
+    private Socket connection;
+    private String fileName;
+    private String filePath;
 
-    public Connection(Socket socket) {
+    public Connection(Socket socket, String filePath) {
         this.connection = socket;
         this.fileName = "";
+        this.filePath = filePath;
         this.start();
     }
 
@@ -38,7 +40,7 @@ public class Connection extends Thread {
 
             System.out.println("RECEIVED FILE --> " + fileName);
 
-            OutputStream localWriter = new FileOutputStream("files/replication/" + fileName);
+            OutputStream localWriter = new FileOutputStream(filePath + fileName);
 
             while ((bytesRead = in.read(buffer)) != -1) {
                 //System.out.println(bytesRead);

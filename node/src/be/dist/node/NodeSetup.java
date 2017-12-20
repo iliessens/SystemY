@@ -12,10 +12,12 @@ import be.dist.node.replication.Bestandsfiche;
 import be.dist.node.replication.FileDiscovery;
 import be.dist.node.replication.NewFilesChecker;
 
+import java.io.File;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.Map;
 
 public class NodeSetup  implements NodeRMIInt{
     public static volatile String nameIP;
@@ -183,7 +185,7 @@ public class NodeSetup  implements NodeRMIInt{
         }
     }
 
-    private NodeRMIInt getRemoteSetup(String ip) {
+    public static NodeRMIInt getRemoteSetup(String ip) {
         NodeRMIInt remoteSetup = null;
         try {
             Registry registry = LocateRegistry.getRegistry(ip);
@@ -271,5 +273,28 @@ public class NodeSetup  implements NodeRMIInt{
     public void receiveBestandsFiche(Bestandsfiche bestandsfiche, String filename) {
         fileDiscovery.getIO().recieveBestandsfiche(bestandsfiche, filename);
     }
+
+
+    public void deleteReplica(String path) {
+        String repPath = "files/replication/";
+        repPath += path;
+
+        new File(repPath).delete();
+    }
+
+    public void shutdownHandlerOwner(String fileName) {
+        int amountOfDownloads = fileDiscovery.getIO().getBestandsfiches().keySet().size();
+
+        if (amountOfDownloads > 0) {
+            // TODO
+        }
+
+        else {
+            String path = "files/replication/";
+            path += fileName;
+            new File(path).delete();
+        }
+    }
+
 
 }

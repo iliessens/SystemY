@@ -9,7 +9,7 @@ public class NodeFileInformation extends FileInformation{
 
     public NodeFileInformation(Boolean isLocal, Boolean isOwner, String fileName) {
         super(fileName);
-        this.isLocal = isLocal;
+        this.isLocal = isLocal; // heeft originele
         this.isOwner = isOwner;
     }
 

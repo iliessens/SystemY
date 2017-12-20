@@ -12,4 +12,7 @@ public interface NodeRMIInt extends Remote {
     void runAgent(Agent agentToRun) throws RemoteException;
     boolean hasFile(String filename) throws RemoteException;
     void receiveBestandsFiche(Bestandsfiche bestandsfiche, String filename) throws RemoteException;
+    void deleteReplica(String sdfd) throws RemoteException;
+    Node getPrevious();
+    void shutdownHandlerOwner(String fileName);
 }
