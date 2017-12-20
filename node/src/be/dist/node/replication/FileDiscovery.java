@@ -197,11 +197,12 @@ public class FileDiscovery {
             FileInformation fileInfo = entry.getValue();
             Boolean isOwner = fileInfo.getOwner();
             Boolean isLokaal = fileInfo.getLocal();
+            System.out.println("Robbe check: lijst files die in mappen gestoken worden."+entry.getValue().getFileName());
 
-            if (!isLokaal) {
-                replicaties.put(entry.getKey(), entry.getValue());
-            } else {
+            if (isLokaal) {
                 lokale.put(entry.getKey(), entry.getValue());
+            } else {
+                replicaties.put(entry.getKey(), entry.getValue());
             }
 
             regelReplicaties(replicaties);
@@ -219,7 +220,7 @@ public class FileDiscovery {
 
             /* Wanneer een bestand dat bij deze node gerepliceerd is, lokaal aanwezig is bij zijn vorige node,
             moet het naar de vorige node van zijn vorige node verplaatst worden */
-            if (IPOfLocal == IPPrevious) {
+            if (IPOfLocal.equals(IPPrevious)) {
                 NodeRMIInt previous = NodeSetup.getRemoteSetup(IPPrevious);
                 String previousOfPreviousIP = previous.getPrevious().getIp();
                 sender.send(previousOfPreviousIP, filePath);
