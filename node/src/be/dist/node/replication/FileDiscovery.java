@@ -204,18 +204,19 @@ public class FileDiscovery {
             } else {
                 replicaties.put(entry.getKey(), entry.getValue());
             }
-
-            regelReplicaties(replicaties);
-            regelLokale(lokale);
         }
+        regelReplicaties(replicaties);
+        regelLokale(lokale);
     }
 
     public void regelReplicaties(HashMap<String, FileInformation> reps) throws RemoteException {
+        System.out.println("regelReplicatie!!!");
         for(Map.Entry<String,FileInformation> entry : reps.entrySet()) {
             String fileName = entry.getKey();
             String filePath = "files/replication/"+fileName;
             String IPPrevious = nodeSetup.getPrevious().getIp(); // IP van vorige node
             Map<String, Bestandsfiche> fiches = io.getBestandsfiches();
+            System.out.println("Robbe check : " + fileName);
             String IPOfLocal = fiches.get(fileName).getLocalIP(); // IP van lokale versie -- gevraagd via eigenaar's bestandsfiche
 
             /* Wanneer een bestand dat bij deze node gerepliceerd is, lokaal aanwezig is bij zijn vorige node,
