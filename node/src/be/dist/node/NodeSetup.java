@@ -250,7 +250,7 @@ public class NodeSetup  implements NodeRMIInt{
     }
 
     public void shutdownHandlerAlsDezeNodeOwnerIPVDegeneDieDitOproeptViaRMI(String fileName) {
-        String filePath = "files/replication" + fileName;
+        String filePath = "files/replication/" + fileName;
         fileDiscovery.send(previous.getIp(), filePath);
         Bestandsfiche temp = fileDiscovery.getIO().getBestandsfiches().get(fileName);
         temp.setReplicatieLocatie(previous.getIp());

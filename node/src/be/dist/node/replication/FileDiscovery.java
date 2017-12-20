@@ -4,6 +4,7 @@ import be.dist.common.NamingServerInt;
 import be.dist.common.NodeRMIInt;
 import be.dist.node.NodeSetup;
 
+import java.io.File;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -251,11 +252,13 @@ public class FileDiscovery {
                 String ownerIP = remoteSetup.getOwner(fileName);
                 NodeRMIInt owner = NodeSetup.getRemoteSetup(ownerIP);
                 owner.shutdownHandlerAlsDezeNodeOwnerIPVDegeneDieDitOproeptViaRMI(fileName);
+                nodeSetup.deleteReplica(fileName);
             }
         }
     }
 
     public void regelLokale(HashMap<String, FileInformation> lokale) throws RemoteException{
+        System.out.println("regelLokale!!!");
         for(Map.Entry<String, FileInformation> entry : lokale.entrySet()) {
             String fileName = entry.getKey();
             String filePath = "files/replication/"+fileName;
