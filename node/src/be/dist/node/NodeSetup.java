@@ -243,6 +243,7 @@ public class NodeSetup  implements NodeRMIInt{
         }
 
         else {
+            System.out.println("ROBBE CHECK 39!!!");
             String path = "files/replication/";
             path += fileName;
             new File(path).delete();
