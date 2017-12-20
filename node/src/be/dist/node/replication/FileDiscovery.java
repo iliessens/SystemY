@@ -263,9 +263,14 @@ public class FileDiscovery {
             String fileName = entry.getKey();
             String filePath = "files/replication/"+fileName;
 
-            String owner = remoteSetup.getOwner(fileName);
-            NodeRMIInt temp = NodeSetup.getRemoteSetup(owner);
-            temp.shutdownHandlerOwner(fileName);
+            if (!io.getBestandsfiches().containsKey(fileName)) {
+                String owner = remoteSetup.getOwner(fileName);
+                NodeRMIInt temp = NodeSetup.getRemoteSetup(owner);
+                temp.shutdownHandlerOwner(fileName);
+            }
+            else {
+                nodeSetup.shutdownHandlerOwner(fileName);
+            }
         }
     }
 
