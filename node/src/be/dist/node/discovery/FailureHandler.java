@@ -41,9 +41,9 @@ public class FailureHandler {
             remoteSetup.setNeighbours(null,nextNode);
 
 
-            Agent agent = new FailureAgent(ip, LocalIP.getLocalIP());
+            Agent agent = new FailureAgent(ip, previousNode.getIp()); // stop on previous of failed
             //run failure agent on next node
-            registry = LocateRegistry.getRegistry(nextNode.getIp());
+            registry = LocateRegistry.getRegistry(nextNode.getIp()); // start on next of failed
             remoteSetup = (NodeSetup) registry.lookup("nodeSetup");
             remoteSetup.runAgent(agent);
 
