@@ -1,6 +1,7 @@
 package be.dist.node.gui;
 
 import be.dist.common.NodeRMIInt;
+import be.dist.node.NodeSetup;
 import be.dist.node.agents.AgentFile;
 import be.dist.node.agents.LocalFileList;
 import be.dist.node.agents.LocalIP;
@@ -29,12 +30,19 @@ public class MainWindow {
     private Map<String,AgentFile> fileMap;
     private FileDownloader downloader;
 
+    private NodeSetup setup;
+
     public static void main(String args[]) {
         MainWindow gui = new MainWindow();
         gui.openGUI();
     }
 
+    public void setNodeSetup(NodeSetup setup) {
+        this.setup = setup;
+    }
+
     public MainWindow() {
+
         try {
             UIManager.setLookAndFeel(
                     UIManager.getSystemLookAndFeelClassName());
@@ -82,7 +90,7 @@ public class MainWindow {
         deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                // TODO do delete action
+                deleteFile();
             }
         });
 
@@ -104,6 +112,19 @@ public class MainWindow {
         // enable list
         fileList.setEnabled(true);
         downloader.update();
+    }
+
+    private void deleteFile() {
+        try {
+            Registry registry = LocateRegistry.getRegistry(setup.getNext().getIp());
+            NodeRMIInt remoteSetup = (NodeRMIInt) registry.lookup("nodeSetup");
+
+            String deleteName = selectedFile.getFileName();
+            DeleteAgent agent = new DeleteAgent(deleteName);
+            remoteSetup.runAgent(agent);
+        } catch (RemoteException | NotBoundException e) {
+            e.printStackTrace();
+        }
     }
 
     public void openGUI() {
