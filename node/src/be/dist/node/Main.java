@@ -4,6 +4,7 @@ import be.dist.node.agents.LocalIP;
 import be.dist.node.discovery.MulticastListener;
 import be.dist.node.discovery.MulticastSender;
 import be.dist.node.discovery.NodeRMIServer;
+import be.dist.node.gui.MainWindow;
 import be.dist.node.replication.TCPListener;
 
 public class Main {
@@ -43,12 +44,17 @@ public class Main {
         listener.start();
 
         // download listener
-        new TCPListener(7900,"files/downloads/").run();
+        new TCPListener(7900,"files/downloads/").start();
 
         System.out.println("Multicast listener enabled...");
         System.out.println("Node staat volledig aan.");
 
         UIThread ui = new UIThread(setup);
         ui.start();
+        
+        MainWindow window = new MainWindow();
+        window.setNodeSetup(setup);
+        window.openGUI();
+
     }
 }
