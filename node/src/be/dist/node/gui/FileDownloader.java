@@ -48,11 +48,11 @@ public class FileDownloader {
                 case WAITFORLOCK: if(fileObject.getLockedBy().equals(LocalIP.getLocalIP())) { // file is locked by us
                     // lock succeeded
                     downloadRequests.put(fileObject,FileLockState.LOCKED); // update state
+                    executeDownload(fileObject);
                 }
                     break;
 
                 case LOCKED: // wait until lock is set by all nodes, then download
-                    executeDownload(fileObject);
                     fileObject.removeLockRequest(); // download is started, lock can be removed
                     downloadRequests.put(fileObject,FileLockState.UNLOCKED); // update state
                     break;
