@@ -1,5 +1,6 @@
 package be.dist.node.gui;
 
+import be.dist.common.NamingServerInt;
 import be.dist.common.NodeRMIInt;
 import be.dist.node.NodeSetup;
 import be.dist.node.agents.AgentFile;
@@ -114,8 +115,20 @@ public class MainWindow {
         downloader.update();
     }
 
+    private void deleteBestandsFiche () throws RemoteException, NotBoundException {
+            Registry registry = LocateRegistry.getRegistry(LocalIP.getNameServerIP());
+            NamingServerInt nameServer = (NamingServerInt) registry.lookup("NamingServer");
+
+            String ownerIp = nameServer.getOwner(selectedFile.getFileName());
+
+            registry = LocateRegistry.getRegistry(ownerIp);
+            NodeRMIInt remoteSetup = (NodeRMIInt) registry.lookup("nodeSetup");
+            //remoteSetup.
+    }
+
     private void deleteFile() {
         try {
+            //deleteBestandsFiche();
             Registry registry = LocateRegistry.getRegistry(setup.getNext().getIp());
             NodeRMIInt remoteSetup = (NodeRMIInt) registry.lookup("nodeSetup");
 
