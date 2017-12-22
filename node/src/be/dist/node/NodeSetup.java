@@ -69,7 +69,6 @@ public class NodeSetup  implements NodeRMIInt{
         if(numberOfNodes <= 1) {
             this.previous = selfNode;
             this.next = selfNode;
-            startAgent();
 
         }
         doReplicationWhenSetup();
@@ -232,28 +231,35 @@ public class NodeSetup  implements NodeRMIInt{
             discoveryThread.start();
             new NewFilesChecker().start();
             setupDone = true;
+            startAgent();
         }
     }
 
     public void runAgent(Agent agent) {
-        Thread agentThread = new Thread(agent);
-        agentThread.start(); // start agent thread
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Thread agentThread = new Thread(agent);
+                agentThread.start(); // start agent thread
 
-        try {
-            agentThread.join(); // wait untill ready
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+                try {
+                    agentThread.join(); // wait untill ready
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
 
-        if (!agent.getStopFlag()) {
+                if (!agent.getStopFlag()) {
 
-            NodeRMIInt remote = getRemoteSetup(next.getIp());
-            try {
-                remote.runAgent(agent);
-            } catch (RemoteException e) {
-                e.printStackTrace();
+                    NodeRMIInt remote = getRemoteSetup(next.getIp());
+                    try {
+                        remote.runAgent(agent);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                }
+
             }
-        }
+        }).start();
     }
 
     public boolean hasFile(String filename) {
