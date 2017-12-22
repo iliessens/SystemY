@@ -84,7 +84,8 @@ public class MainWindow {
         downloadButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                downloader.downloadFile(selectedFile);
+                //downloader.downloadFile(selectedFile);
+                downloader.executeDownload(selectedFile);
             }
         });
 
