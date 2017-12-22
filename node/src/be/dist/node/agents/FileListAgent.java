@@ -48,7 +48,7 @@ public class FileListAgent implements Agent {
     // remove locks set earlier by this node
     private void removeLocalLocks() {
         fileList.entrySet().stream()
-                .filter(x -> x.getValue().getLockedBy().equals(LocalIP.getLocalIP()))
+                .filter(x -> LocalIP.getLocalIP().equals(x.getValue().getLockedBy()))
                 .forEach(x -> x.getValue().setLockedBy(null));
     }
 
