@@ -11,6 +11,7 @@ import be.dist.node.discovery.FailureHandler;
 import be.dist.node.replication.Bestandsfiche;
 import be.dist.node.replication.FileDiscovery;
 import be.dist.node.replication.NewFilesChecker;
+import be.dist.node.replication.TCPSender;
 
 import java.io.File;
 import java.rmi.NotBoundException;
@@ -290,10 +291,18 @@ public class NodeSetup  implements NodeRMIInt{
         }
 
         else {
+            System.out.println("ROBBE CHECK 39!!!");
             String path = "files/replication/";
             path += fileName;
             new File(path).delete();
         }
+    }
+
+    public void shutdownHandlerAlsDezeNodeOwnerIPVDegeneDieDitOproeptViaRMI(String fileName) {
+        String filePath = "files/original/" + fileName;
+        fileDiscovery.send(previous.getIp(), filePath);
+        Bestandsfiche temp = fileDiscovery.getIO().getBestandsfiches().get(fileName);
+        temp.setReplicatieLocatie(previous.getIp());
     }
 
 
