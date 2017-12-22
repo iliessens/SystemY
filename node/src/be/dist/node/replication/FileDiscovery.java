@@ -267,6 +267,7 @@ public class FileDiscovery {
             if (!entry.getValue().getOwner()) {
                 System.out.println("Robbe check 38: " + fileName);
                 String owner = remoteSetup.getOwner(fileName);
+                System.out.println("IP owner " + owner);
                 NodeRMIInt temp = NodeSetup.getRemoteSetup(owner);
                 temp.shutdownHandlerOwner(fileName);
             }

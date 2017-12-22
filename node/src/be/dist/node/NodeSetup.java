@@ -237,7 +237,7 @@ public class NodeSetup  implements NodeRMIInt{
 
     public void shutdownHandlerOwner(String fileName) {
         int amountOfDownloads = fileDiscovery.getIO().getBestandsfiches().keySet().size();
-
+        System.out.println("Robbe check 40");
         if (amountOfDownloads > 0) {
             // TODO
         }
