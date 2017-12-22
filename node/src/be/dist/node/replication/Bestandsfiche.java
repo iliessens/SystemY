@@ -39,4 +39,8 @@ public class Bestandsfiche implements Serializable {
     public void setReplicatieLocatie(String locatie) {
         this.replicatieLocatie = locatie;
     }
+
+    public int getAmountOfDownloads() {
+        return downloadLocaties.size();
+    }
 }
