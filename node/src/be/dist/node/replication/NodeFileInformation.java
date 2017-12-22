@@ -1,19 +1,16 @@
 package be.dist.node.replication;
 
-public class FileInformation {
+import be.dist.node.FileInformation;
+
+public class NodeFileInformation extends FileInformation{
 
     private Boolean isLocal;
     private Boolean isOwner;
-    private String fileName;
 
-    public FileInformation(Boolean isLocal, Boolean isOwner, String fileName) {
+    public NodeFileInformation(Boolean isLocal, Boolean isOwner, String fileName) {
+        super(fileName);
         this.isLocal = isLocal; // heeft originele
         this.isOwner = isOwner;
-        this.fileName = fileName;
-    }
-
-    public String getFileName() {
-        return fileName;
     }
 
     public Boolean getLocal() {

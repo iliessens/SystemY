@@ -6,7 +6,8 @@ import java.util.stream.Collectors;
 
 public class FileIO {
 
-    private Map<String,FileInformation> informationMap;
+    private Map<String,NodeFileInformation> informationMap;
+
     private HashMap<String,Bestandsfiche> bestandsfiches;
 
     public FileIO()
@@ -34,12 +35,12 @@ public class FileIO {
             return files;
     }
 
-    public Map<String,FileInformation> getMap() {
+    public Map<String,NodeFileInformation> getMap() {
         if(informationMap == null) {
             informationMap = getLocalFiles()
                     .stream()
-                    .map(x -> new FileInformation(true, null, x))
-                    .collect(Collectors.toMap(FileInformation::getFileName, x -> x));
+                    .map(x -> new NodeFileInformation(true, null, x))
+                    .collect(Collectors.toMap(NodeFileInformation::getFileName, x -> x));
         }
         return informationMap;
     }

@@ -3,6 +3,9 @@ package be.dist.node.discovery;
 import be.dist.common.NamingServerInt;
 import be.dist.common.Node;
 import be.dist.node.NodeSetup;
+import be.dist.common.Agent;
+import be.dist.node.agents.FailureAgent;
+import be.dist.node.agents.LocalIP;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -38,11 +41,16 @@ public class FailureHandler {
             remoteSetup.setNeighbours(null,nextNode);
 
 
-            // remove from naming server
-            namingServer.removeNodeByIp(ip);
+            Agent agent = new FailureAgent(ip, LocalIP.getLocalIP());
+            //run failure agent on next node
+            registry = LocateRegistry.getRegistry(nextNode.getIp());
+            remoteSetup = (NodeSetup) registry.lookup("nodeSetup");
+            remoteSetup.runAgent(agent);
+
         }
         catch (RemoteException | NotBoundException e) {
             e.printStackTrace();
         }
     }
+
 }

@@ -42,6 +42,9 @@ public class FileDiscovery {
         return discovery;
     }
 
+    public Map<String,NodeFileInformation> getFileList() {
+        return io.getMap();
+    }
 
     public void discoverFiles() {
         System.out.println("Filediscovery starting... (die van imre) robbe print");
@@ -53,13 +56,13 @@ public class FileDiscovery {
     public void fileCheck(String fileName)  {
         System.out.println("Checking file: "+fileName);
         try {
-            FileInformation fileInfo;
+            NodeFileInformation fileInfo;
             String fileOwnerIP = remoteSetup.getOwner(fileName);
             String filePath = "files/original/"+fileName;
 
             fileInfo = io.getMap().get(fileName);
             if (fileInfo == null) { // new file not yet in map
-                fileInfo = new FileInformation(true,false,fileName);
+                fileInfo = new NodeFileInformation(true,false,fileName);
                 io.getMap().put(fileName,fileInfo);
             }
 
@@ -89,15 +92,15 @@ public class FileDiscovery {
 
     public void fileCheckDownloads(String fileName)  {
         try {
-            FileInformation fileInfo;
+            NodeFileInformation fileInfo;
             String fileOwner = remoteSetup.getOwner(fileName);
             if (fileOwner.equals(myIP)) {
                 String fileDuplicate = remoteSetup.getOwner(myName);
-                fileInfo = new FileInformation(false, true, fileName);
+                fileInfo = new NodeFileInformation(false, true, fileName);
                 io.getMap().put(fileName, fileInfo);
 
             } else {
-                fileInfo = new FileInformation(false, false, fileName);
+                fileInfo = new NodeFileInformation(false, false, fileName);
                 io.getMap().put(fileName, fileInfo);
             }
         }
@@ -111,9 +114,9 @@ public class FileDiscovery {
     public void fileCheckNewNode(String ipNewNode) {
         try {
             //hij loopt over alle files die hij heeft, zowel origineel als replicatie.
-        for(Map.Entry<String,FileInformation> entry : io.getMap().entrySet()) {
+        for(Map.Entry<String,NodeFileInformation> entry : io.getMap().entrySet()) {
             String fileName = entry.getKey();
-            FileInformation fileInfo = entry.getValue();
+            NodeFileInformation fileInfo = entry.getValue();
             String fileOwner = null;
             String filePath = null;
             fileOwner = remoteSetup.getOwner(fileName);
@@ -148,7 +151,7 @@ public class FileDiscovery {
 
     public void fileCheckShutdownNode() throws RemoteException {
         Map<String, Bestandsfiche> fiches = io.getBestandsfiches();
-        for(Map.Entry<String,FileInformation> entry : io.getMap().entrySet()) {
+        for(Map.Entry<String,NodeFileInformation> entry : io.getMap().entrySet()) {
             if (entry.getValue().getLocal()) { /** Deze node heeft het originele bestand */
                 if (entry.getValue().getOwner()){ /** Deze node is eigenaar van hetzelfde bestand --> replicatie bevindt zich bij vorige node */
                     //
@@ -191,11 +194,11 @@ public class FileDiscovery {
     }
 
     public void fileCheckShutdownNodev2() throws RemoteException{
-        HashMap<String, FileInformation> replicaties = new HashMap<>();
-        HashMap<String, FileInformation> lokale = new HashMap<>();
+        HashMap<String, NodeFileInformation> replicaties = new HashMap<>();
+        HashMap<String, NodeFileInformation> lokale = new HashMap<>();
 
-        for(Map.Entry<String,FileInformation> entry : io.getMap().entrySet()) {
-            FileInformation fileInfo = entry.getValue();
+        for(Map.Entry<String,NodeFileInformation> entry : io.getMap().entrySet()) {
+            NodeFileInformation fileInfo = entry.getValue();
             Boolean isOwner = fileInfo.getOwner();
             Boolean isLokaal = fileInfo.getLocal();
             System.out.println("Robbe check: lijst files die in mappen gestoken worden."+entry.getValue().getFileName());
@@ -210,9 +213,9 @@ public class FileDiscovery {
         regelLokale(lokale);
     }
 
-    public void regelReplicaties(HashMap<String, FileInformation> reps) throws RemoteException {
+    public void regelReplicaties(HashMap<String, NodeFileInformation> reps) throws RemoteException {
         System.out.println("regelReplicatie!!!");
-        for(Map.Entry<String,FileInformation> entry : reps.entrySet()) {
+        for(Map.Entry<String,NodeFileInformation> entry : reps.entrySet()) {
             String fileName = entry.getKey();
             String filePath = "files/replication/"+fileName;
             String IPPrevious = nodeSetup.getPrevious().getIp(); // IP van vorige node
@@ -257,9 +260,10 @@ public class FileDiscovery {
         }
     }
 
-    public void regelLokale(HashMap<String, FileInformation> lokale) throws RemoteException{
+
+    public void regelLokale(HashMap<String, NodeFileInformation> lokale) throws RemoteException {
         System.out.println("regelLokale!!!");
-        for(Map.Entry<String, FileInformation> entry : lokale.entrySet()) {
+        for(Map.Entry<String, NodeFileInformation> entry : lokale.entrySet()) {
             String fileName = entry.getKey();
             String filePath = "files/replication/"+fileName;
 

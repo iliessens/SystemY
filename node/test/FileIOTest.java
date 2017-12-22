@@ -1,5 +1,5 @@
 import be.dist.node.replication.FileIO;
-import be.dist.node.replication.FileInformation;
+import be.dist.node.replication.NodeFileInformation;
 import org.junit.Test;
 
 import java.util.List;
@@ -19,8 +19,8 @@ public class FileIOTest {
     @Test
     public void testMap() {
         FileIO io = new FileIO();
-        Map<String,FileInformation> map= io.getMap();
-        FileInformation info = map.get("testfile.txt");
+        Map<String,NodeFileInformation> map= io.getMap();
+        NodeFileInformation info = map.get("testfile.txt");
         assert info != null;
         assert info.getLocal(); // should be local
         assert info.getOwner() == null; // is still unknown

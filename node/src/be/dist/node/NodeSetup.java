@@ -4,6 +4,9 @@ import be.dist.common.NameHasher;
 import be.dist.common.NamingServerInt;
 import be.dist.common.Node;
 import be.dist.common.NodeRMIInt;
+import be.dist.common.Agent;
+import be.dist.node.agents.FileListAgent;
+import be.dist.node.agents.LocalIP;
 import be.dist.node.discovery.FailureHandler;
 import be.dist.node.replication.Bestandsfiche;
 import be.dist.node.replication.FileDiscovery;
@@ -18,7 +21,7 @@ import java.rmi.registry.Registry;
 import java.util.Map;
 
 public class NodeSetup  implements NodeRMIInt{
-    private volatile String nameIP;
+    public static volatile String nameIP;
     private int numberOfNodes;
     private volatile Node previous;
     private volatile Node next;
@@ -44,7 +47,7 @@ public class NodeSetup  implements NodeRMIInt{
         return next;
     }
 
-    public String getNameServerIP() {
+    public static String getNameServerIP() {
         return nameIP;
     }
 
@@ -52,7 +55,8 @@ public class NodeSetup  implements NodeRMIInt{
     public void setupNode(String nameserverIP, int numberOfNodes) throws RemoteException {
 
         this.numberOfNodes = numberOfNodes;
-        this.nameIP = nameserverIP;
+        nameIP = nameserverIP;
+        LocalIP.setNameServerIP(nameIP); // save to static field for everyone
 
         fileDiscovery = new FileDiscovery(nameIP, ownIp, name, this);
 
@@ -65,9 +69,17 @@ public class NodeSetup  implements NodeRMIInt{
         if(numberOfNodes <= 1) {
             this.previous = selfNode;
             this.next = selfNode;
+            startAgent();
+
         }
         doReplicationWhenSetup();
 
+    }
+
+    private void startAgent() {
+        // start fileList agent in the network
+        FileListAgent agent =  new FileListAgent();
+        runAgent(agent);
     }
 
     @Override
@@ -222,11 +234,47 @@ public class NodeSetup  implements NodeRMIInt{
             setupDone = true;
         }
     }
-    
+
+    public void runAgent(Agent agent) {
+        Thread agentThread = new Thread(agent);
+        agentThread.start(); // start agent thread
+
+        try {
+            agentThread.join(); // wait untill ready
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        if (!agent.getStopFlag()) {
+
+            NodeRMIInt remote = getRemoteSetup(next.getIp());
+            try {
+                remote.runAgent(agent);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public boolean hasFile(String filename) {
+        return FileDiscovery.getInstance().getFileList().containsKey(filename);
+    }
+
+    public void sendBestandsFiche(Bestandsfiche bestandsfiche, String filename, String ip){
+        NodeRMIInt sendBestandsficheToRemote = null;
+        try {
+            Registry registry = LocateRegistry.getRegistry(ip);
+            sendBestandsficheToRemote = (NodeRMIInt) registry.lookup("nodeSetup");
+            sendBestandsficheToRemote.receiveBestandsFiche(bestandsfiche, filename);
+        } catch (RemoteException | NotBoundException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void receiveBestandsFiche(Bestandsfiche bestandsfiche, String filename) {
         fileDiscovery.getIO().recieveBestandsfiche(bestandsfiche, filename);
     }
+
 
     public void deleteReplica(String path) {
         String repPath = "files/replication/";
@@ -257,7 +305,6 @@ public class NodeSetup  implements NodeRMIInt{
         Bestandsfiche temp = fileDiscovery.getIO().getBestandsfiches().get(fileName);
         temp.setReplicatieLocatie(previous.getIp());
     }
-
 
 
 }

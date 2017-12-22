@@ -1,5 +1,6 @@
 package be.dist.node;
 
+import be.dist.node.agents.LocalIP;
 import be.dist.node.discovery.MulticastListener;
 import be.dist.node.discovery.MulticastSender;
 import be.dist.node.discovery.NodeRMIServer;
@@ -24,6 +25,8 @@ public class Main {
             name = args[0];
             System.out.println(ip);
         }
+
+        LocalIP.setLocalIP(ip);
 
         TCPListener tcpListener = new TCPListener(7899);
         tcpListener.start();
