@@ -1,6 +1,7 @@
 package be.dist.node;
 
 import be.dist.common.Node;
+import be.dist.node.agents.LocalFileList;
 import be.dist.node.replication.FileDiscovery;
 
 import java.rmi.RemoteException;
@@ -19,6 +20,7 @@ public class UIThread extends Thread {
     public void run() {
         while (true) {
             System.out.println("Press 1 to show current neighbours");
+            System.out.println("Press 2 to show fileList");
             System.out.println("Press 9 to quit: ");
             int keuze = 0;
             boolean inValid = true;
@@ -35,6 +37,9 @@ public class UIThread extends Thread {
             switch (keuze) {
                 case 1:
                     printNeighbours();
+                    break;
+                case 2:
+                    printFileList();
                     break;
                 case 9:
                     shutdown();
@@ -57,5 +62,9 @@ public class UIThread extends Thread {
 
     public void printNeighbours() {
         setup.printNeighbours();
+    }
+
+    public  void printFileList() {
+        System.out.println(LocalFileList.getFileMap().keySet());
     }
 }

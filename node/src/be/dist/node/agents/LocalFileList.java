@@ -7,12 +7,11 @@ public class LocalFileList {
 
     private static Map<String,AgentFile> fileMap;
 
-    public LocalFileList() {
-        fileMap = new HashMap<>();
-    }
-
     public static Map<String, AgentFile> getFileMap() {
-        return fileMap;
+        if (fileMap == null) {
+            return new HashMap<>();
+        }
+        else return fileMap;
     }
 
     public static void setFileMap(Map<String, AgentFile> fileMap) {
