@@ -20,7 +20,6 @@ public class FileListAgent implements Agent {
 
     @Override
     public void run() {
-        System.out.println("File List agent visited");
        FileDiscovery discovery =  FileDiscovery.getInstance(); // Get the local filediscovery
         Map<String,NodeFileInformation> list = discovery.getFileList();
 
