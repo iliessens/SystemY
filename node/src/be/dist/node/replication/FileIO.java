@@ -51,10 +51,11 @@ public class FileIO {
 
     public void newBestandsfiche(String filename, String localip, String replicatieip){
         Bestandsfiche bestandsfiche = new Bestandsfiche(localip, replicatieip);
+        bestandsfiches.put(filename, bestandsfiche);
     }
 
     public void recieveBestandsfiche(Bestandsfiche bestandsfiche, String filename){
-        getBestandsfiches().put(filename, bestandsfiche);
+        this.bestandsfiches.put(filename, bestandsfiche);
     }
 
 }

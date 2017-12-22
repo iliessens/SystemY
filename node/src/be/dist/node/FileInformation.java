@@ -1,6 +1,8 @@
 package be.dist.node;
 
-public class FileInformation {
+import java.io.Serializable;
+
+public class FileInformation implements Serializable {
     private String fileName;
 
     public FileInformation(String filename) {

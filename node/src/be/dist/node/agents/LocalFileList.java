@@ -8,12 +8,11 @@ public class LocalFileList {
     private static Map<String,AgentFile> fileMap;
     private static Set<Consumer<Map<String,AgentFile>>> observers = new HashSet<>();
 
-    public LocalFileList() {
-        fileMap = new HashMap<>();
-    }
-
     public static Map<String, AgentFile> getFileMap() {
-        return Collections.unmodifiableMap(fileMap); // prevent modifications to ensure observer pattern
+        if (fileMap == null) {
+            return new HashMap<>();
+        }
+        else return Collections.unmodifiableMap(fileMap); // prevent modifications to ensure observer pattern
     }
 
     public static void setFileMap(Map<String, AgentFile> fileMap) {

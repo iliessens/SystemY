@@ -4,6 +4,7 @@ import be.dist.common.Agent;
 import be.dist.common.NamingServerInt;
 import be.dist.common.NodeRMIInt;
 import be.dist.node.NodeSetup;
+import be.dist.node.replication.Bestandsfiche;
 import be.dist.node.replication.FileDiscovery;
 import be.dist.node.replication.NodeFileInformation;
 import be.dist.node.replication.TCPSender;
@@ -50,6 +51,8 @@ public class FailureAgent implements Agent {
             Registry registry = LocateRegistry.getRegistry(newOwner);
             NodeRMIInt remoteNode = (NodeSetup) registry.lookup("nodeSetup");
 
+            // dit is enkel nodig wanneer we ook downloads gebruiken voor herstel
+            // Dit is voorlopig niet het geval en kan dus enkel van de owner komen --> steeds true
             if (! remoteNode.hasFile(file.getKey())) { // only replicate if not already there
 
                 TCPSender sender = new TCPSender(7899);
@@ -59,11 +62,15 @@ public class FailureAgent implements Agent {
                 } else {
                     path = "files/replication/" + file.getKey();
                 }
+                // send the file to its new owner
                 sender.send(newOwner, path);
+
+                // send the logfile to the new owner
+                Bestandsfiche fiche = new Bestandsfiche(LocalIP.getLocalIP(),newOwner);
+                remoteNode.receiveBestandsFiche(fiche,file.getKey());
             }
             else {
-                //TODO bestandsfiche op nieuwe eigenaar updaten
-                // heeft enkel nut wanneer we ook downloads gebruiken om de replicatie te herstellen
+                //bestandsfiche op nieuwe eigenaar updaten
             }
         }
         catch (RemoteException | NotBoundException e) {
@@ -76,6 +83,7 @@ public class FailureAgent implements Agent {
             NamingServerInt nameServer = (NamingServerInt) registry.lookup("NamingServer");
             return nameServer.getPrevious(failedIP).getIp();
     }
+
 
     private void removeFromNameserver() {
         try {

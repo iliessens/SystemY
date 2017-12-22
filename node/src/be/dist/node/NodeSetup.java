@@ -13,10 +13,12 @@ import be.dist.node.replication.FileDiscovery;
 import be.dist.node.replication.NewFilesChecker;
 import be.dist.node.replication.TCPSender;
 
+import java.io.File;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.Map;
 
 public class NodeSetup  implements NodeRMIInt{
     public static volatile String nameIP;
@@ -67,7 +69,6 @@ public class NodeSetup  implements NodeRMIInt{
         if(numberOfNodes <= 1) {
             this.previous = selfNode;
             this.next = selfNode;
-            startAgent();
 
         }
         doReplicationWhenSetup();
@@ -184,7 +185,7 @@ public class NodeSetup  implements NodeRMIInt{
         }
     }
 
-    private NodeRMIInt getRemoteSetup(String ip) {
+    public static NodeRMIInt getRemoteSetup(String ip) {
         NodeRMIInt remoteSetup = null;
         try {
             Registry registry = LocateRegistry.getRegistry(ip);
@@ -230,28 +231,35 @@ public class NodeSetup  implements NodeRMIInt{
             discoveryThread.start();
             new NewFilesChecker().start();
             setupDone = true;
+            startAgent();
         }
     }
 
     public void runAgent(Agent agent) {
-        Thread agentThread = new Thread(agent);
-        agentThread.start(); // start agent thread
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Thread agentThread = new Thread(agent);
+                agentThread.start(); // start agent thread
 
-        try {
-            agentThread.join(); // wait untill ready
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+                try {
+                    agentThread.join(); // wait untill ready
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
 
-        if (!agent.getStopFlag()) {
+                if (!agent.getStopFlag()) {
 
-            NodeRMIInt remote = getRemoteSetup(next.getIp());
-            try {
-                remote.runAgent(agent);
-            } catch (RemoteException e) {
-                e.printStackTrace();
+                    NodeRMIInt remote = getRemoteSetup(next.getIp());
+                    try {
+                        remote.runAgent(agent);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                }
+
             }
-        }
+        }).start();
     }
 
     public boolean hasFile(String filename) {
@@ -282,5 +290,37 @@ public class NodeSetup  implements NodeRMIInt{
     public void receiveBestandsFiche(Bestandsfiche bestandsfiche, String filename) {
         fileDiscovery.getIO().recieveBestandsfiche(bestandsfiche, filename);
     }
+
+
+    public void deleteReplica(String path) {
+        String repPath = "files/replication/";
+        repPath += path;
+
+        new File(repPath).delete();
+    }
+
+    public void shutdownHandlerOwner(String fileName) {
+        int amountOfDownloads = fileDiscovery.getIO().getBestandsfiches().get(fileName).getAmountOfDownloads();
+        System.out.println("Robbe check 40");
+        if (amountOfDownloads > 0) {
+            // TODO
+            System.out.println();
+        }
+
+        else {
+            System.out.println("ROBBE CHECK 39!!!");
+            String path = "files/replication/";
+            path += fileName;
+            new File(path).delete();
+        }
+    }
+
+    public void shutdownHandlerAlsDezeNodeOwnerIPVDegeneDieDitOproeptViaRMI(String fileName) {
+        String filePath = "files/original/" + fileName;
+        fileDiscovery.send(previous.getIp(), filePath);
+        Bestandsfiche temp = fileDiscovery.getIO().getBestandsfiches().get(fileName);
+        temp.setReplicatieLocatie(previous.getIp());
+    }
+
 
 }

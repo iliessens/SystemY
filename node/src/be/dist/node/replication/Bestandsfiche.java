@@ -11,13 +11,13 @@ public class Bestandsfiche implements Serializable {
 
     public Bestandsfiche(String lokaalIP, String replicatieLocatie, TreeSet<String> downloadLocaties) {
         this.lokaalIP = lokaalIP;
-        this.downloadLocaties = downloadLocaties; // <IP, Owner>
+        this.downloadLocaties = downloadLocaties;
         this.replicatieLocatie = replicatieLocatie;
     }
 
     public Bestandsfiche(String lokaalIP, String replicatieLocatie) {
         this.lokaalIP = lokaalIP;
-        this.downloadLocaties = new TreeSet<String>(); // <IP, Owner>
+        this.downloadLocaties = new TreeSet<String>();
         this.replicatieLocatie = replicatieLocatie;
     }
 
@@ -30,5 +30,17 @@ public class Bestandsfiche implements Serializable {
 
     public void setLocal(String local) {
         this.lokaalIP = local;
+    }
+
+    public String getReplicatieLocatie() {
+        return replicatieLocatie;
+    }
+
+    public void setReplicatieLocatie(String locatie) {
+        this.replicatieLocatie = locatie;
+    }
+
+    public int getAmountOfDownloads() {
+        return downloadLocaties.size();
     }
 }

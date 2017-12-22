@@ -10,7 +10,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class FileListAgent implements Agent {
-    private Map<String,AgentFile> fileList; // boolean indicates lock
+    // the fileList contained in the agent
+    private Map<String,AgentFile> fileList;
 
     public FileListAgent() {
         // Treemap omdat elke filename maar een keer mag vookomen
@@ -25,6 +26,7 @@ public class FileListAgent implements Agent {
         removeLocalLocks();
 
         List<String> localFiles = list.entrySet().stream()
+                .filter(x -> x.getValue().getOwner() != null)
                 .filter(x -> x.getValue().getOwner()) // only keep owned files
                 .map(Map.Entry::getKey) // only keep filename
                 .collect(Collectors.toList());
@@ -45,7 +47,7 @@ public class FileListAgent implements Agent {
     // remove locks set earlier by this node
     private void removeLocalLocks() {
         fileList.entrySet().stream()
-                .filter(x -> x.getValue().getLockedBy().equals(LocalIP.getLocalIP()))
+                .filter(x -> LocalIP.getLocalIP().equals(x.getValue().getLockedBy()))
                 .forEach(x -> x.getValue().setLockedBy(null));
     }
 
@@ -53,9 +55,10 @@ public class FileListAgent implements Agent {
     private void processLocks() {
         Map<String,AgentFile> localList = LocalFileList.getFileMap();
         localList.entrySet().stream()
-                .filter(x -> x.getValue().hashLockRequest())
+                .filter(x -> x.getValue().hashLockRequest()) // find files that have a request on them
+                .filter(x -> fileList.get(x.getKey()).getLockedBy() == null) // only lock files that are not already locked
                 .forEach(x -> fileList.get(x.getKey())
-                        .setLockedBy(LocalIP.getLocalIP()));
+                        .setLockedBy(LocalIP.getLocalIP())); // lock the files
     }
 
     @Override
