@@ -2,7 +2,9 @@ package be.dist.node.agents;
 
 import be.dist.node.FileInformation;
 
-public class AgentFile extends FileInformation {
+import java.io.Serializable;
+
+public class AgentFile extends FileInformation implements Serializable {
     private String lockedBy;
     private String ownerIP;
     private boolean lockRequest; // only useful in local list
