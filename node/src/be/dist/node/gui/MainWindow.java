@@ -146,6 +146,7 @@ public class MainWindow {
         frame.setContentPane(new MainWindow().panel1);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
+        frame.setTitle("System Y User Interface");
         frame.setVisible(true);
     }
 
