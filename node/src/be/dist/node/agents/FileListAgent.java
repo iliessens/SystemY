@@ -27,6 +27,7 @@ public class FileListAgent implements Agent {
         removeLocalLocks();
 
         List<String> localFiles = list.entrySet().stream()
+                .filter(x -> x.getValue().getOwner() != null)
                 .filter(x -> x.getValue().getOwner()) // only keep owned files
                 .map(Map.Entry::getKey) // only keep filename
                 .collect(Collectors.toList());
