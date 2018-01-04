@@ -24,9 +24,10 @@ This manual will guide you through the setup for running the project in the Inte
 
     **For nameserver**  
     Enter your preferred IP-address in the box.
+    When te IP-address is not bound to any interface on the host an error will be shown during program startup.
 
 4. Click the OK button
-5. Add any files you want in the network to the following folder ```.../node/files/original/``
+5. Add any files you want in the network to the following folder ```.../node/files/original/```
 5. Click the run button in the upper right corner.
 
 If a message of the *firewall* appears, allow it. If the system won't work, it might be necessary to disable the firewall entirely.
