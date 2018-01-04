@@ -23,8 +23,8 @@ This manual will guide you through the setup for running the project in the Inte
     For example: ``imre 10.2.1.10``. The IP address indicates the interface on which the program will bind. Make sure it is correctly configured.  
 
     **For nameserver**  
-    Enter your preferred IP-address in the box.
-    When te IP-address is not bound to any interface on the host an error will be shown during program startup.
+    Enter your preferred IP-address in the box.  
+    When the IP-address is not bound to any interface on the host an error will be shown during program startup.
 
 4. Click the OK button
 5. Add any files you want in the network to the following folder ```.../node/files/original/```
