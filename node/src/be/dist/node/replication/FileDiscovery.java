@@ -53,6 +53,7 @@ public class FileDiscovery {
         }
     }
 
+    //om de lokaale files juist te classificeren en door te sturen
     public void fileCheck(String fileName)  {
         System.out.println("Checking file: "+fileName);
         try {
@@ -90,6 +91,7 @@ public class FileDiscovery {
 
     }
 
+    //dit checkt de files die binnen komen van andere nodes door replicatie.
     public void fileCheckDownloads(String fileName)  {
         try {
             NodeFileInformation fileInfo;
@@ -111,6 +113,8 @@ public class FileDiscovery {
 
     }
 
+    // hier wordt gecheckt ofdat wanneer er een nieuw previous node bijkomt sommige files niet daar gerepliceerd moeten worden
+    // in plaats van op deze node.
     public void fileCheckNewNode(String ipNewNode) {
         try {
             //hij loopt over alle files die hij heeft, zowel origineel als replicatie.
@@ -149,6 +153,8 @@ public class FileDiscovery {
         }
     }
 
+    // deze check kijkt wat er met alle files moet gebeuren bij afsluiten zowel de lokaale als de replicaties
+    // deze wordt niet gebruikt
     public void fileCheckShutdownNode() throws RemoteException {
         Map<String, Bestandsfiche> fiches = io.getBestandsfiches();
         for(Map.Entry<String,NodeFileInformation> entry : io.getMap().entrySet()) {
@@ -193,6 +199,8 @@ public class FileDiscovery {
         }
     }
 
+    // deze check kijkt wat er met alle files moet gebeuren bij afsluiten zowel de lokaale als de replicaties
+    // deze wordt wel gebruikt
     public void fileCheckShutdownNodev2() throws RemoteException{
         HashMap<String, NodeFileInformation> replicaties = new HashMap<>();
         HashMap<String, NodeFileInformation> lokale = new HashMap<>();
@@ -213,6 +221,7 @@ public class FileDiscovery {
         regelLokale(lokale);
     }
 
+    //deze zorg voor het doorsturen en wijziggen van replicaties op andere nodes (deze klasse wordt aangeroepen vanop een andere node en nooit lokaal)
     public void regelReplicaties(HashMap<String, NodeFileInformation> reps) throws RemoteException {
         System.out.println("regelReplicatie!!!");
         for(Map.Entry<String,NodeFileInformation> entry : reps.entrySet()) {
@@ -260,7 +269,7 @@ public class FileDiscovery {
         }
     }
 
-
+    // deze zorgt voor het regelen van de downloads op andere nodes (wordt ook nooit lokaal maar enkel door andere nodes aangeroepen)
     public void regelLokale(HashMap<String, NodeFileInformation> lokale) throws RemoteException {
         System.out.println("regelLokale!!!");
         for(Map.Entry<String, NodeFileInformation> entry : lokale.entrySet()) {
@@ -285,6 +294,7 @@ public class FileDiscovery {
         return io;
     }
 
+    // het versturen van het bestandsfiche naar andere nodes bij wijziging eigenaar
     private void sendBestandsFiche(Bestandsfiche bestandsfiche, String filename, String ip){
         NodeRMIInt sendBestandsficheToRemote = null;
         try {
@@ -296,6 +306,7 @@ public class FileDiscovery {
         }
     }
 
+    // het verturen van bestanden naar andere nodes
     public void send(String IP, String filePath) {
         sender.send(IP, filePath);
     }
