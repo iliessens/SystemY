@@ -6,6 +6,21 @@ Jannes Van Goeye
 Robbe Pauwels  
 Imre Liessens  
 
+## Versions
+A number of branches have been created to keep the different versions apart.  
+
+* PR4-discovery  
+* PR5-replication: bootstrap and replication, no shutdown or failure  
+* PR5.2-Replication: full PR5 assignment  
+* PR6-Agents: working FileListAgent + inactive FailureAgent
+* PR7-GUI: Untested GUI  
+* Master: Same as PR7 + portfolio's  
+
+###Important notes
+![Warning sign](http://icons.iconarchive.com/icons/paomedia/small-n-flat/32/sign-warning-icon.png) ==**The most recent stable version is PR6-Agents.** Use this for testing the system.==  
+
+++Note:++ the System is untested on more than three hosts: one namingserver and two nodes. Using more nodes is at your own risk.  
+
 ## How to run the project  
 This manual will guide you through the setup for running the project in the IntelliJ IDE. Running form CLI is possible and very similar.  
 
