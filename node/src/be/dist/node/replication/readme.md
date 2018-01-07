@@ -1,7 +1,6 @@
 ​There are some important remarks to be made that are either too extensive to be implemented as comments in the code itself or too technical to be mentioned in the portfolio report. Therefore, we will continue our discussion of the code in this readme.md file. This text also includes much of the comments that can be found in the code as well.
 
 # class: FileDiscovery
-
 ## method: discoverFiles() 
 Scans every locally present file on the node during setup. 
 
