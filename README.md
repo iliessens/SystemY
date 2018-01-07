@@ -16,7 +16,7 @@ A number of branches have been created to keep the different versions apart.
 * PR7-GUI: Untested GUI  
 * Master: Same as PR7 + portfolio's  
 
-###Important notes  
+### Important notes  
 
 ⚠️ **The most recent stable version is PR6-Agents.** Use this for testing the system. ⚠️  
 
