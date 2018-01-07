@@ -16,10 +16,11 @@ A number of branches have been created to keep the different versions apart.
 * PR7-GUI: Untested GUI  
 * Master: Same as PR7 + portfolio's  
 
-###Important notes
-![Warning sign](http://icons.iconarchive.com/icons/paomedia/small-n-flat/32/sign-warning-icon.png) ==**The most recent stable version is PR6-Agents.** Use this for testing the system.==  
+###Important notes  
 
-++Note:++ the System is untested on more than three hosts: one namingserver and two nodes. Using more nodes is at your own risk.  
+⚠️ **The most recent stable version is PR6-Agents.** Use this for testing the system. ⚠️  
+
+🛑 **Note:** the System is untested on more than three hosts: one namingserver and two nodes. Using more nodes is at your own risk.  
 
 ## How to run the project  
 This manual will guide you through the setup for running the project in the IntelliJ IDE. Running form CLI is possible and very similar.  
