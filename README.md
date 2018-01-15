@@ -14,7 +14,7 @@ A number of branches have been created to keep the different versions apart.
 * PR5.2-Replication: full PR5 assignment  
 * PR6-Agents: working FileListAgent + inactive FailureAgent
 * PR7-GUI: Untested GUI  
-* Master: Same as PR7 + portfolio's  
+* Master: Same as PR6 + portfolio's  
 
 ### Important notes  
 
